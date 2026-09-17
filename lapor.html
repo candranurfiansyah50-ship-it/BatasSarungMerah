@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lapor PSN & Kasus DBD - BATAS SARUNG MERAH</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS for Map Picker -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#E11D48', primaryDark: '#BE123C', secondary: '#0F172A', accent: '#0284C7', success: '#059669', warning: '#D97706' },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; color: #1E293B; }
+        .nav-active { color: #E11D48; border-bottom: 3px solid #E11D48; font-weight: 700; }
+        .type-btn.active { background-color: #E11D48; color: #ffffff; box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.3); }
+        #picker-map { width: 100%; height: 320px; border-radius: 1rem; z-index: 10; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- Header / Navigasi -->
+    <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-3">
+                <div class="bg-gradient-to-br from-rose-600 to-red-700 text-white p-3.5 rounded-2xl shadow-lg shadow-red-500/20 flex items-center justify-center">
+                    <i class="fa-solid fa-shield-virus text-xl"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-slate-900">BATAS SARUNG MERAH</h1>
+                        <span class="bg-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Pasongsongan</span>
+                    </div>
+                    <p class="text-xs text-slate-500 font-medium">Lintas Sektor Brantas Sarang Nyamuk DBD</p>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Menu -->
+            <nav class="hidden lg:flex items-center space-x-8 text-sm font-semibold">
+                <a href="index.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Dashboard</a>
+                <a href="lapor.html" class="nav-active pb-1 transition">Lapor PSN</a>
+                <a href="peta.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Zona Risiko</a>
+                <a href="jadwal.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Jadwal Aksi</a>
+                <a href="edukasi.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Edukasi 3M+</a>
+            </nav>
+
+            <div class="flex items-center space-x-3">
+                <button onclick="toggleMobileMenu()" class="lg:hidden text-slate-700 p-2 rounded-lg hover:bg-slate-100 transition">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-2">
+            <a href="index.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Dashboard</a>
+            <a href="lapor.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm bg-rose-50 text-rose-600">Lapor PSN</a>
+            <a href="peta.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Zona Risiko</a>
+            <a href="jadwal.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Jadwal Aksi</a>
+            <a href="edukasi.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Edukasi 3M+</a>
+        </div>
+    </header>
+
+    <!-- Main Content: Lapor PSN & Kasus DBD -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        <section class="bg-white p-8 sm:p-10 rounded-3xl shadow-sm border border-slate-100 max-w-3xl mx-auto">
+            <div class="text-center max-w-xl mx-auto mb-6">
+                <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-xl mx-auto mb-3">
+                    <i class="fa-solid fa-file-pen"></i>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Layanan Lintas Sektor Pasongsongan</h2>
+                <p class="text-xs sm:text-sm text-slate-500 mt-1">Pilih jenis pelaporan dan tandai lokasi titik temuan pada peta otomatis.</p>
+            </div>
+
+            <!-- Tombol Pilihan Opsi Pelaporan -->
+            <div class="grid grid-cols-2 gap-3 p-1.5 bg-slate-100 rounded-2xl mb-8">
+                <button type="button" id="btnOptPSN" onclick="switchReportType('psn')" class="type-btn active py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-mosquito"></i>
+                    <span>Lapor Sarang / Jentik Nyamuk</span>
+                </button>
+                <button type="button" id="btnOptPasien" onclick="switchReportType('pasien')" class="type-btn py-3 px-4 rounded-xl font-bold text-xs sm:text-sm text-slate-600 transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-bed-pulse"></i>
+                    <span>Lapor Pasien Terjangkit DBD</span>
+                </button>
+            </div>
+
+            <form id="formPSN" onsubmit="handleLaporan(event)" class="space-y-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nama Pelapor / Kader</label>
+                        <input type="text" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition" placeholder="Masukkan nama lengkap">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nomor WhatsApp</label>
+                        <input type="tel" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition" placeholder="08xxxxxxxxxx">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Pilih Desa di Pasongsongan</label>
+                        <select required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition font-medium">
+                            <option value="">-- Pilih Desa --</option>
+                            <option value="pasongsongan">Desa Pasongsongan</option>
+                            <option value="lebengtimur">Desa Lebeng Timur</option>
+                            <option value="lebengbarat">Desa Lebeng Barat</option>
+                            <option value="panaongan">Desa Panaongan</option>
+                            <option value="montorna">Desa Montorna</option>
+                            <option value="prancak">Desa Prancak</option>
+                            <option value="soddara">Desa Soddara</option>
+                            <option value="rajun">Desa Rajun</option>
+                            <option value="padangdangan">Desa Padang Dangan</option>
+                        </select>
+                    </div>
+
+                    <!-- Kolom Dinamis 1: Status Jentik (Tampil saat mode PSN) -->
+                    <div id="fieldStatusJentik">
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Status Kondisi Jentik Air</label>
+                        <select class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition font-medium">
+                            <option value="bebas">Negatif Jentik (Aman / Bebas Jentik)</option>
+                            <option value="ada">Positif Ditemukan Jentik</option>
+                        </select>
+                    </div>
+
+                    <!-- Kolom Dinamis 2: Nama Pasien (Tampil saat mode Pasien DBD) -->
+                    <div id="fieldNamaPasien" class="hidden">
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nama Pasien / Terduga DBD</label>
+                        <input type="text" id="inputNamaPasien" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition" placeholder="Nama lengkap pasien">
+                    </div>
+                </div>
+
+                <!-- Kolom Tambahan Usia & Lokasi Rawat (Tampil saat mode Pasien DBD) -->
+                <div id="extraPasienFields" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Perkiraan Usia Pasien</label>
+                        <input type="number" id="inputUsia" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition" placeholder="Contoh: 12 (tahun)">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Lokasi Perawatan Saat Ini</label>
+                        <select id="inputLokasiRawat" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition font-medium">
+                            <option value="puskesmas">Puskesmas Pasongsongan</option>
+                            <option value="rumahsakit">Rumah Sakit Rujukan / Kabupaten</option>
+                            <option value="dirumah">Perawatan Mandiri di Rumah</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- FITUR MAPS OTOMATIS: Pilih Titik / Ambil GPS -->
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Titik Koordinat Lokasi Otomatis (Maps)</label>
+                        <button type="button" onclick="getGPSLocation()" class="bg-sky-50 text-sky-700 hover:bg-sky-100 text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center space-x-1.5">
+                            <i class="fa-solid fa-location-crosshairs"></i>
+                            <span>Gunakan GPS Saya</span>
+                        </button>
+                    </div>
+                    <div class="relative rounded-2xl overflow-hidden border border-slate-200 shadow-inner">
+                        <div id="picker-map"></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 pt-1">
+                        <input type="text" id="inputLat" readonly class="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-xs text-slate-600" placeholder="Latitude">
+                        <input type="text" id="inputLng" readonly class="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-xs text-slate-600" placeholder="Longitude">
+                    </div>
+                    <p class="text-[11px] text-slate-400"><i class="fa-solid fa-circle-info"></i> Geser pin merah pada peta atau klik tombol "Gunakan GPS Saya" untuk mendeteksi posisi secara otomatis.</p>
+                </div>
+
+                <div>
+                    <label id="labelCatatan" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Catatan / Keterangan Penampungan Air</label>
+                    <textarea id="inputCatatan" rows="3" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition" placeholder="Sebutkan bak mandi, drum, atau tempayan yang diperiksa..."></textarea>
+                </div>
+
+                <button type="submit" id="submitBtn" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3.5 rounded-xl text-sm shadow-lg shadow-rose-600/20 transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>Kirim Laporan Sarang / Jentik Nyamuk</span>
+                </button>
+            </form>
+
+            <div id="alertSuccess" class="hidden mt-6 p-4 bg-emerald-50 text-emerald-800 rounded-2xl text-sm font-semibold border border-emerald-200 flex items-center space-x-3">
+                <i class="fa-solid fa-circle-check text-xl text-emerald-600"></i>
+                <span id="alertText">Laporan berhasil dikirim ke Posko Kecamatan Pasongsongan! Terima kasih atas partisipasi Anda.</span>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+            <p class="font-medium">&copy; 2026 BATAS SARUNG MERAH - Kecamatan Pasongsongan, Kabupaten Sumenep.</p>
+            <div class="flex space-x-6 font-semibold">
+                <a href="index.html" class="hover:text-rose-600">Kantor Kecamatan</a>
+                <a href="index.html" class="hover:text-rose-600">Puskesmas</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        let currentReportType = 'psn';
+        let pickerMap = null;
+        let marker = null;
+
+        // Inisialisasi Peta Picker saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", function() {
+            const defaultCenter = [-6.930, 113.660]; // Pusat Kecamatan Pasongsongan
+            
+            pickerMap = L.map('picker-map').setView(defaultCenter, 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(pickerMap);
+
+            // Buat marker yang bisa digeser (draggable)
+            marker = L.marker(defaultCenter, { draggable: true }).addTo(pickerMap);
+
+            // Set nilai awal koordinat
+            updateCoordinates(defaultCenter[0], defaultCenter[1]);
+
+            // Update koordinat saat marker digeser
+            marker.on('dragend', function(e) {
+                const pos = marker.getLatLng();
+                updateCoordinates(pos.lat, pos.lng);
+            });
+
+            // Update koordinat saat peta diklik
+            pickerMap.on('click', function(e) {
+                marker.setLatLng(e.latlng);
+                updateCoordinates(e.latlng.lat, e.latlng.lng);
+            });
+        });
+
+        function updateCoordinates(lat, lng) {
+            document.getElementById('inputLat').value = lat.toFixed(6);
+            document.getElementById('inputLng').value = lng.toFixed(6);
+        }
+
+        // Fungsi Deteksi GPS Otomatis Perangkat
+        function getGPSLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const userLat = position.coords.latitude;
+                    const userLng = position.coords.longitude;
+                    
+                    const newLatLng = new L.LatLng(userLat, userLng);
+                    marker.setLatLng(newLatLng);
+                    pickerMap.setView(newLatLng, 16);
+                    updateCoordinates(userLat, userLng);
+                }, function(error) {
+                    alert('Gagal mendeteksi lokasi GPS. Pastikan izin lokasi (GPS) pada browser Anda aktif.');
+                }, { enableHighAccuracy: true });
+            } else {
+                alert('Browser Anda tidak mendukung fitur deteksi GPS otomatis.');
+            }
+        }
+
+        function switchReportType(type) {
+            currentReportType = type;
+            const btnPSN = document.getElementById('btnOptPSN');
+            const btnPasien = document.getElementById('btnOptPasien');
+            const fieldStatusJentik = document.getElementById('fieldStatusJentik');
+            const fieldNamaPasien = document.getElementById('fieldNamaPasien');
+            const extraPasienFields = document.getElementById('extraPasienFields');
+            const labelCatatan = document.getElementById('labelCatatan');
+            const inputCatatan = document.getElementById('inputCatatan');
+            const submitBtnText = document.querySelector('#submitBtn span');
+            const inputNamaPasien = document.getElementById('inputNamaPasien');
+
+            if (type === 'psn') {
+                btnPSN.className = "type-btn active py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center space-x-2";
+                btnPasien.className = "type-btn py-3 px-4 rounded-xl font-bold text-xs sm:text-sm text-slate-600 transition flex items-center justify-center space-x-2";
+                
+                fieldStatusJentik.classList.remove('hidden');
+                fieldNamaPasien.classList.add('hidden');
+                extraPasienFields.classList.add('hidden');
+                inputNamaPasien.removeAttribute('required');
+
+                labelCatatan.innerText = "Catatan / Keterangan Penampungan Air";
+                inputCatatan.placeholder = "Sebutkan bak mandi, drum, atau tempayan yang diperiksa...";
+                submitBtnText.innerText = "Kirim Laporan Sarang / Jentik Nyamuk";
+            } else {
+                btnPasien.className = "type-btn active py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center space-x-2";
+                btnPSN.className = "type-btn py-3 px-4 rounded-xl font-bold text-xs sm:text-sm text-slate-600 transition flex items-center justify-center space-x-2";
+                
+                fieldStatusJentik.classList.add('hidden');
+                fieldNamaPasien.classList.remove('hidden');
+                extraPasienFields.classList.remove('hidden');
+                inputNamaPasien.setAttribute('required', 'true');
+
+                labelCatatan.innerText = "Kronologi / Gejala yang Dialami Pasien";
+                inputCatatan.placeholder = "Sebutkan gejala awal (demam tinggi, bintik merah, dll) dan tanggal mulai sakit...";
+                submitBtnText.innerText = "Kirim Laporan Kasus Pasien DBD";
+            }
+        }
+
+        function handleLaporan(event) {
+            event.preventDefault();
+            const alertBox = document.getElementById('alertSuccess');
+            const alertText = document.getElementById('alertText');
+
+            if (currentReportType === 'psn') {
+                alertText.innerText = "Laporan kondisi jentik dan titik koordinat peta berhasil dikirim ke Posko PSN Kecamatan Pasongsongan!";
+            } else {
+                alertText.innerText = "Laporan darurat kasus pasien DBD beserta titik koordinat lokasi telah diteruskan ke Tim Medis Puskesmas Pasongsongan!";
+            }
+
+            alertBox.classList.remove('hidden');
+            document.getElementById('formPSN').reset();
+            switchReportType('psn');
+            setTimeout(() => { alertBox.classList.add('hidden'); }, 6000);
+        }
+    </script>
+</body>
+</html>

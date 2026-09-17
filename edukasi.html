@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edukasi 3M+ - BATAS SARUNG MERAH</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#E11D48', primaryDark: '#BE123C', secondary: '#0F172A', accent: '#0284C7', success: '#059669', warning: '#D97706' },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; color: #1E293B; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.08); }
+        .nav-active { color: #E11D48; border-bottom: 3px solid #E11D48; font-weight: 700; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- Header / Navigasi -->
+    <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-3">
+                <div class="bg-gradient-to-br from-rose-600 to-red-700 text-white p-3.5 rounded-2xl shadow-lg shadow-red-500/20 flex items-center justify-center">
+                    <i class="fa-solid fa-shield-virus text-xl"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-slate-900">BATAS SARUNG MERAH</h1>
+                        <span class="bg-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Pasongsongan</span>
+                    </div>
+                    <p class="text-xs text-slate-500 font-medium">Lintas Sektor Brantas Sarang Nyamuk DBD</p>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Menu -->
+            <nav class="hidden lg:flex items-center space-x-8 text-sm font-semibold">
+                <a href="index.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Dashboard</a>
+                <a href="lapor.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Lapor PSN</a>
+                <a href="peta.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Zona Risiko</a>
+                <a href="jadwal.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Jadwal Aksi</a>
+                <a href="edukasi.html" class="nav-active pb-1 transition">Edukasi 3M+</a>
+            </nav>
+
+            <div class="flex items-center space-x-3">
+                <button onclick="toggleMobileMenu()" class="lg:hidden text-slate-700 p-2 rounded-lg hover:bg-slate-100 transition">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-2">
+            <a href="index.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Dashboard</a>
+            <a href="lapor.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Lapor PSN</a>
+            <a href="peta.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Zona Risiko</a>
+            <a href="jadwal.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Jadwal Aksi</a>
+            <a href="edukasi.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm bg-rose-50 text-rose-600">Edukasi 3M+</a>
+        </div>
+    </header>
+
+    <!-- Main Content: Edukasi 3M+ -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 card-hover flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-2xl font-black mb-6">1</div>
+                    <h3 class="font-extrabold text-xl text-slate-900 mb-3">MENGURAS</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">Menguras dan menyikat tempat penampungan air seperti bak mandi, ember, tempayan, dan gentong air secara rutin minimal seminggu sekali.</p>
+                </div>
+            </div>
+            <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 card-hover flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-2xl font-black mb-6">2</div>
+                    <h3 class="font-extrabold text-xl text-slate-900 mb-3">MENUTUP</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">Menutup rapat-rapat segala bentuk tempat penampungan air seperti drum dan tandon air agar nyamuk tidak dapat masuk dan bertelur.</p>
+                </div>
+            </div>
+            <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 card-hover flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-2xl font-black mb-6">3</div>
+                    <h3 class="font-extrabold text-xl text-slate-900 mb-3">MENDAUR ULANG</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">Memanfaatkan atau mendaur ulang barang-barang bekas di sekitar pekarangan rumah (kaleng, botol plastik, ban bekas).</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+            <p class="font-medium">&copy; 2026 BATAS SARUNG MERAH - Kecamatan Pasongsongan, Kabupaten Sumenep.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>

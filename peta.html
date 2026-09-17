@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zona Risiko DBD - BATAS SARUNG MERAH</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#E11D48', primaryDark: '#BE123C', secondary: '#0F172A', accent: '#0284C7', success: '#059669', warning: '#D97706' },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; color: #1E293B; }
+        .nav-active { color: #E11D48; border-bottom: 3px solid #E11D48; font-weight: 700; }
+        #map { width: 100%; height: 480px; border-radius: 1.5rem; z-index: 10; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- Header / Navigasi -->
+    <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-3">
+                <div class="bg-gradient-to-br from-rose-600 to-red-700 text-white p-3.5 rounded-2xl shadow-lg shadow-red-500/20 flex items-center justify-center">
+                    <i class="fa-solid fa-shield-virus text-xl"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-slate-900">BATAS SARUNG MERAH</h1>
+                        <span class="bg-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Pasongsongan</span>
+                    </div>
+                    <p class="text-xs text-slate-500 font-medium">Lintas Sektor Brantas Sarang Nyamuk DBD</p>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Menu -->
+            <nav class="hidden lg:flex items-center space-x-8 text-sm font-semibold">
+                <a href="index.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Dashboard</a>
+                <a href="lapor.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Lapor PSN</a>
+                <a href="peta.html" class="nav-active pb-1 transition">Zona Risiko</a>
+                <a href="jadwal.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Jadwal Aksi</a>
+                <a href="edukasi.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Edukasi 3M+</a>
+            </nav>
+
+            <div class="flex items-center space-x-3">
+                <button onclick="toggleMobileMenu()" class="lg:hidden text-slate-700 p-2 rounded-lg hover:bg-slate-100 transition">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-2">
+            <a href="index.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Dashboard</a>
+            <a href="lapor.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Lapor PSN</a>
+            <a href="peta.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm bg-rose-50 text-rose-600">Zona Risiko</a>
+            <a href="jadwal.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Jadwal Aksi</a>
+            <a href="edukasi.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Edukasi 3M+</a>
+        </div>
+    </header>
+
+    <!-- Main Content: Peta Zona Risiko -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        <section class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-900">Peta Sebaran Zona Risiko DBD Kecamatan Pasongsongan</h2>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Pemetaan wilayah tingkat desa berdasarkan temuan kasus dan jentik secara real-time.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-3 text-xs font-bold">
+                    <span class="flex items-center space-x-1.5 bg-rose-50 text-rose-700 px-3 py-1.5 rounded-full border border-rose-200"><span class="w-2.5 h-2.5 bg-rose-600 rounded-full inline-block"></span> <span>Zona Waspada</span></span>
+                    <span class="flex items-center space-x-1.5 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full border border-emerald-200"><span class="w-2.5 h-2.5 bg-emerald-500 rounded-full inline-block"></span> <span>Zona Aman</span></span>
+                </div>
+            </div>
+
+            <!-- Leaflet Map Container -->
+            <div class="relative rounded-3xl overflow-hidden border border-slate-200 shadow-inner">
+                <div id="map"></div>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-3 text-center"><i class="fa-solid fa-circle-info"></i> Klik pada pin lingkaran di peta untuk melihat detail status risiko dan jumlah kasus per desa.</p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+            <p class="font-medium">&copy; 2026 BATAS SARUNG MERAH - Kecamatan Pasongsongan, Kabupaten Sumenep.</p>
+        </div>
+    </footer>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Inisialisasi Peta Leaflet dengan Data Direset (Nol Kasus / Zona Aman)
+        document.addEventListener("DOMContentLoaded", function() {
+            const pasongsonganCenter = [-6.930, 113.660];
+            const map = L.map('map').setView(pasongsonganCenter, 12);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            const zonaDesa = [
+                { name: "Desa Pasongsongan", lat: -6.902, lng: 113.646, status: "Aman", kasus: "Nol Kasus (ABJ 100%)", color: "#10b981" },
+                { name: "Desa Lebeng Timur", lat: -6.951, lng: 113.677, status: "Aman", kasus: "Nol Kasus (ABJ 100%)", color: "#10b981" },
+                { name: "Desa Lebeng Barat", lat: -6.948, lng: 113.649, status: "Aman", kasus: "Nol Kasus (ABJ 100%)", color: "#10b981" },
+                { name: "Desa Panaongan", lat: -6.899, lng: 113.668, status: "Aman", kasus: "Nol Kasus (ABJ 100%)", color: "#10b981" },
+                { name: "Desa Montorna", lat: -6.991, lng: 113.623, status: "Aman", kasus: "Nol Kasus (ABJ 100%)", color: "#10b981" },
+                { name: "Desa Prancak", lat: -6.987, lng: 113.650, status: "Aman", kasus: "Nol Kasus (ABJ 100%)", color: "#10b981" },
+                { name: "Desa Soddara", lat: -6.924, lng: 113.685, status: "Aman", kasus: "Nol Kasus (ABJ 100%)", color: "#10b981" },
+                { name: "Desa Rajun", lat: -6.954, lng: 113.701, status: "Aman", kasus: "Nol Kasus (ABJ 100%)", color: "#10b981" },
+                { name: "Desa Padang Dangan", lat: -6.898, lng: 113.689, status: "Aman", kasus: "Nol Kasus (ABJ 100%)", color: "#10b981" }
+            ];
+
+            zonaDesa.forEach(desa => {
+                const circle = L.circle([desa.lat, desa.lng], {
+                    color: desa.color,
+                    fillColor: desa.color,
+                    fillOpacity: 0.4,
+                    radius: 700
+                }).addTo(map);
+
+                circle.bindPopup(`
+                    <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 4px;">
+                        <b style="font-size: 14px; color: #0F172A;">${desa.name}</b><br>
+                        <span style="font-size: 12px; color: #64748B;">Status: <strong style="color: ${desa.color};">${desa.status}</strong></span><br>
+                        <span style="font-size: 12px; color: #64748B;">Keterangan: ${desa.kasus}</span>
+                    </div>
+                `);
+            });
+        });
+    </script>
+</body>
+</html>

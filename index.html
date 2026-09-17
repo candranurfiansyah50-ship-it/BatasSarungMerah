@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BATAS SARUNG MERAH - Kec. Pasongsongan, Sumenep</title>
+    <title>BATAS SARUNG MERAH - Dashboard Kec. Pasongsongan</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Leaflet CSS for Interactive Map -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -32,328 +30,129 @@
         }
     </script>
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #F8FAFC;
-            color: #1E293B;
-        }
-        .hero-gradient {
-            background: linear-gradient(135deg, #990000 0%, #CC0000 50%, #FF3333 100%);
-        }
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
-        }
-        .tab-btn.active {
-            color: #E11D48;
-            border-bottom: 3px solid #E11D48;
-            font-weight: 700;
-        }
-        /* Custom Leaflet Map styling */
-        #map {
-            width: 100%;
-            height: 420px;
-            border-radius: 1.5rem;
-            z-index: 10;
-        }
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #F1F5F9;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #CBD5E1;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94A3B8;
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; color: #1E293B; }
+        .hero-gradient { background: linear-gradient(135deg, #990000 0%, #CC0000 50%, #FF3333 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.08); }
+        .nav-active { color: #E11D48; border-bottom: 3px solid #E11D48; font-weight: 700; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
 
-    <!-- Top Navigation Header -->
+    <!-- Header / Navigasi -->
     <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dashboard')">
+            <a href="index.html" class="flex items-center space-x-3">
                 <div class="bg-gradient-to-br from-rose-600 to-red-700 text-white p-3.5 rounded-2xl shadow-lg shadow-red-500/20 flex items-center justify-center">
                     <i class="fa-solid fa-shield-virus text-xl"></i>
                 </div>
                 <div>
                     <div class="flex items-center space-x-2">
                         <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-slate-900">BATAS SARUNG MERAH</h1>
-                        <span class="bg-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Kecamatan Pasongsongan</span>
+                        <span class="bg-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Pasongsongan</span>
                     </div>
-                    <p class="text-xs text-slate-500 font-medium">Bersama Lintas Sektor Brantas Sarang Nyamuk Demam Berdarah</p>
+                    <p class="text-xs text-slate-500 font-medium">Lintas Sektor Brantas Sarang Nyamuk DBD</p>
                 </div>
-            </div>
+            </a>
 
             <!-- Desktop Nav Menu -->
             <nav class="hidden lg:flex items-center space-x-8 text-sm font-semibold">
-                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="tab-btn active pb-1 transition">Dashboard</button>
-                <button onclick="switchTab('laporan')" id="nav-laporan" class="tab-btn text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Lapor PSN</button>
-                <button onclick="switchTab('peta')" id="nav-peta" class="tab-btn text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Zona Risiko</button>
-                <button onclick="switchTab('jadwal')" id="nav-jadwal" class="tab-btn text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Jadwal Aksi</button>
-                <button onclick="switchTab('edukasi')" id="nav-edukasi" class="tab-btn text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Edukasi 3M+</button>
+                <a href="index.html" class="nav-active pb-1 transition">Dashboard</a>
+                <a href="lapor.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Lapor PSN</a>
+                <a href="peta.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Zona Risiko</a>
+                <a href="jadwal.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Jadwal Aksi</a>
+                <a href="edukasi.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Edukasi 3M+</a>
             </nav>
 
             <div class="flex items-center space-x-3">
-                <button onclick="switchTab('laporan')" class="hidden sm:flex bg-rose-600 hover:bg-rose-700 text-white px-4.5 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-rose-600/20 transition items-center space-x-2">
+                <a href="lapor.html" class="hidden sm:flex bg-rose-600 hover:bg-rose-700 text-white px-4.5 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-rose-600/20 transition items-center space-x-2">
                     <i class="fa-solid fa-plus-circle text-base"></i>
-                    <span>Lapor PSN Kecamatan</span>
-                </button>
+                    <span>Lapor PSN</span>
+                </a>
                 <button onclick="toggleMobileMenu()" class="lg:hidden text-slate-700 p-2 rounded-lg hover:bg-slate-100 transition">
-                    <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+                    <i class="fa-solid fa-bars text-xl"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Mobile Menu Dropdown -->
+        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-2">
-            <button onclick="switchTab('dashboard'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Dashboard</button>
-            <button onclick="switchTab('laporan'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Lapor PSN</button>
-            <button onclick="switchTab('peta'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Zona Risiko</button>
-            <button onclick="switchTab('jadwal'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Jadwal Aksi</button>
-            <button onclick="switchTab('edukasi'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Edukasi 3M+</button>
+            <a href="index.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm bg-rose-50 text-rose-600">Dashboard</a>
+            <a href="lapor.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Lapor PSN</a>
+            <a href="peta.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Zona Risiko</a>
+            <a href="jadwal.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Jadwal Aksi</a>
+            <a href="edukasi.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Edukasi 3M+</a>
         </div>
     </header>
 
-    <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
-
-        <!-- ================= TAB 1: DASHBOARD ================= -->
-        <section id="tab-dashboard" class="space-y-8 animate-fadeIn">
-            <div class="hero-gradient rounded-3xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8">
-                <div class="relative z-10 max-w-2xl space-y-4">
-                    <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border border-white/20">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span>Lintas Sektor Kecamatan Pasongsongan 2026</span>
-                    </div>
-                    <h2 class="text-3xl sm:text-5xl font-extrabold leading-tight">Wujudkan Kecamatan Pasongsongan Bebas Jentik & DBD!</h2>
-                    <p class="text-rose-100 text-sm sm:text-base leading-relaxed">Koordinasi terpadu Kantor Kecamatan Pasongsongan, Puskesmas, Koramil, Polsek, Pemerintahan Desa se-Kecamatan, dan seluruh warga Kabupaten Sumenep.</p>
-                    <div class="pt-2 flex flex-wrap gap-3">
-                        <button onclick="switchTab('laporan')" class="bg-white text-rose-700 hover:bg-rose-50 font-bold px-6 py-3 rounded-xl shadow-lg text-sm transition flex items-center space-x-2">
-                            <i class="fa-solid fa-clipboard-user"></i>
-                            <span>Lapor Jentik Mandiri</span>
-                        </button>
-                        <button onclick="switchTab('peta')" class="bg-rose-900/40 hover:bg-rose-900/60 text-white font-bold px-6 py-3 rounded-xl backdrop-blur-md border border-white/20 text-sm transition flex items-center space-x-2">
-                            <i class="fa-solid fa-map-location-dot"></i>
-                            <span>Cek Zona Desa</span>
-                        </button>
-                    </div>
+    <!-- Main Content: Dashboard -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full space-y-8">
+        <div class="hero-gradient rounded-3xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8">
+            <div class="relative z-10 max-w-2xl space-y-4">
+                <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border border-white/20">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Lintas Sektor Kecamatan Pasongsongan 2026</span>
                 </div>
-                <div class="relative z-10 w-full lg:w-auto flex justify-center">
-                    <div class="bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-white/25 text-center shadow-2xl min-w-[260px]">
-                        <p class="text-xs uppercase tracking-widest text-rose-200 font-bold">Angka Bebas Jentik (ABJ)</p>
-                        <p class="text-6xl font-black mt-3 text-white tracking-tight">94.8%</p>
-                        <div class="mt-4 inline-flex items-center space-x-1.5 bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full text-xs font-bold border border-emerald-500/30">
-                            <i class="fa-solid fa-arrow-trend-up"></i>
-                            <span>Target Sumenep Sehat > 95%</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="absolute -right-12 -bottom-12 text-white/5 text-9xl pointer-events-none">
-                    <i class="fa-solid fa-mosquito"></i>
+                <h2 class="text-3xl sm:text-5xl font-extrabold leading-tight">Wujudkan Kecamatan Pasongsongan Bebas Jentik & DBD!</h2>
+                <p class="text-rose-100 text-sm sm:text-base leading-relaxed">Koordinasi terpadu Kantor Kecamatan Pasongsongan, Puskesmas, Koramil, Polsek, Pemerintahan Desa, dan seluruh warga.</p>
+                <div class="pt-2 flex flex-wrap gap-3">
+                    <a href="lapor.html" class="bg-white text-rose-700 hover:bg-rose-50 font-bold px-6 py-3 rounded-xl shadow-lg text-sm transition flex items-center space-x-2">
+                        <i class="fa-solid fa-clipboard-user"></i>
+                        <span>Lapor Jentik Mandiri</span>
+                    </a>
+                    <a href="peta.html" class="bg-rose-900/40 hover:bg-rose-900/60 text-white font-bold px-6 py-3 rounded-xl backdrop-blur-md border border-white/20 text-sm transition flex items-center space-x-2">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                        <span>Cek Zona Desa</span>
+                    </a>
                 </div>
             </div>
-
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4">
-                    <div class="p-4 bg-rose-50 text-rose-600 rounded-2xl"><i class="fa-solid fa-bed-pulse text-2xl"></i></div>
-                    <div>
-                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Kasus Aktif DBD</p>
-                        <h3 class="text-2xl font-extrabold text-slate-900 mt-0.5">5 Orang</h3>
-                        <p class="text-xs text-rose-600 font-semibold mt-0.5">Penanganan Puskesmas</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4">
-                    <div class="p-4 bg-amber-50 text-amber-600 rounded-2xl"><i class="fa-solid fa-triangle-exclamation text-2xl"></i></div>
-                    <div>
-                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Desa Waspada</p>
-                        <h3 class="text-2xl font-extrabold text-slate-900 mt-0.5">2 Desa</h3>
-                        <p class="text-xs text-amber-600 font-semibold mt-0.5">Fokus PSN Serentak</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4">
-                    <div class="p-4 bg-emerald-50 text-emerald-600 rounded-2xl"><i class="fa-solid fa-clipboard-check text-2xl"></i></div>
-                    <div>
-                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Rumah Diperiksa</p>
-                        <h3 class="text-2xl font-extrabold text-slate-900 mt-0.5">2,150</h3>
-                        <p class="text-xs text-emerald-600 font-semibold mt-0.5">Seluruh Desa Se-Kecamatan</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4">
-                    <div class="p-4 bg-sky-50 text-sky-600 rounded-2xl"><i class="fa-solid fa-handshake-angle text-2xl"></i></div>
-                    <div>
-                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Aksi Lintas Sektor</p>
-                        <h3 class="text-2xl font-extrabold text-slate-900 mt-0.5">24 Kali</h3>
-                        <p class="text-xs text-sky-600 font-semibold mt-0.5">Kecamatan & Puskesmas</p>
+            <div class="relative z-10 w-full lg:w-auto flex justify-center">
+                <div class="bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-white/25 text-center shadow-2xl min-w-[260px]">
+                    <p class="text-xs uppercase tracking-widest text-rose-200 font-bold">Angka Bebas Jentik (ABJ)</p>
+                    <p class="text-6xl font-black mt-3 text-white tracking-tight">100%</p>
+                    <div class="mt-4 inline-flex items-center space-x-1.5 bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full text-xs font-bold border border-emerald-500/30">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Kondisi Wilayah Bersih / Aman</span>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- ================= TAB 2: LAPOR PSN ================= -->
-        <section id="tab-laporan" class="hidden space-y-6 animate-fadeIn">
-            <div class="bg-white p-8 sm:p-10 rounded-3xl shadow-sm border border-slate-100 max-w-3xl mx-auto">
-                <div class="text-center max-w-xl mx-auto mb-8">
-                    <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-xl mx-auto mb-3">
-                        <i class="fa-solid fa-file-pen"></i>
-                    </div>
-                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Lapor ke Lintas Sektor Pasongsongan</h2>
-                    <p class="text-xs sm:text-sm text-slate-500 mt-1">Sampaikan hasil pemeriksaan jentik di lingkungan Anda untuk mendukung kesehatan warga di seluruh desa se-Kecamatan Pasongsongan.</p>
-                </div>
-
-                <form id="formPSN" onsubmit="handleLaporan(event)" class="space-y-5">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nama Pelapor / Kader</label>
-                            <input type="text" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition" placeholder="Masukkan nama lengkap">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nomor WhatsApp</label>
-                            <input type="tel" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition" placeholder="08xxxxxxxxxx">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Pilih Desa di Pasongsongan</label>
-                            <select required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition font-medium">
-                                <option value="">-- Pilih Desa --</option>
-                                <option value="pasongsongan">Desa Pasongsongan</option>
-                                <option value="lebengtimur">Desa Lebeng Timur</option>
-                                <option value="lebengbarat">Desa Lebeng Barat</option>
-                                <option value="panaongan">Desa Panaongan</option>
-                                <option value="montorna">Desa Montorna</option>
-                                <option value="prancak">Desa Prancak</option>
-                                <option value="soddara">Desa Soddara</option>
-                                <option value="rajun">Desa Rajun</option>
-                                <option value="padangdangan">Desa Padang Dangan</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Status Kondisi Jentik Air</label>
-                            <select class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition font-medium">
-                                <option value="bebas">Negatif Jentik (Aman / Bebas Jentik)</option>
-                                <option value="ada">Positif Ditemukan Jentik</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Catatan / Keterangan Penampungan Air</label>
-                        <textarea rows="3" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition" placeholder="Sebutkan bak mandi, drum, atau tempayan yang diperiksa..."></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Unggah Foto Pendukung (Opsional)</label>
-                        <input type="file" class="w-full text-xs text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-rose-50 file:text-rose-700 hover:file:bg-rose-100 cursor-pointer">
-                    </div>
-                    <button type="submit" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3.5 rounded-xl text-sm shadow-lg shadow-rose-600/20 transition flex items-center justify-center space-x-2">
-                        <i class="fa-solid fa-paper-plane"></i>
-                        <span>Kirim Laporan ke Lintas Sektor Pasongsongan</span>
-                    </button>
-                </form>
-
-                <div id="alertSuccess" class="hidden mt-6 p-4 bg-emerald-50 text-emerald-800 rounded-2xl text-sm font-semibold border border-emerald-200 flex items-center space-x-3">
-                    <i class="fa-solid fa-circle-check text-xl text-emerald-600"></i>
-                    <span>Laporan berhasil dikirim ke Posko Kecamatan Pasongsongan! Terima kasih atas partisipasi Anda.</span>
+        <!-- Stats Grid (Data Direset ke 0) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4">
+                <div class="p-4 bg-emerald-50 text-emerald-600 rounded-2xl"><i class="fa-solid fa-bed-pulse text-2xl"></i></div>
+                <div>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Kasus Aktif DBD</p>
+                    <h3 class="text-2xl font-extrabold text-slate-900 mt-0.5">0 Orang</h3>
+                    <p class="text-xs text-emerald-600 font-semibold mt-0.5">Tidak Ada Kasus Aktif</p>
                 </div>
             </div>
-        </section>
-
-        <!-- ================= TAB 3: PETA ZONA RISIKO (AKTIF & REAL) ================= -->
-        <section id="tab-peta" class="hidden space-y-6 animate-fadeIn">
-            <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                    <div>
-                        <h2 class="text-2xl font-extrabold text-slate-900">Peta Sebaran Zona Risiko DBD Kecamatan Pasongsongan</h2>
-                        <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Pemetaan wilayah tingkat desa berdasarkan temuan kasus dan jentik secara real-time.</p>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-3 text-xs font-bold">
-                        <span class="flex items-center space-x-1.5 bg-rose-50 text-rose-700 px-3 py-1.5 rounded-full border border-rose-200"><span class="w-2.5 h-2.5 bg-rose-600 rounded-full inline-block"></span> <span>Zona Waspada</span></span>
-                        <span class="flex items-center space-x-1.5 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full border border-emerald-200"><span class="w-2.5 h-2.5 bg-emerald-500 rounded-full inline-block"></span> <span>Zona Aman</span></span>
-                    </div>
-                </div>
-
-                <!-- REAL INTERACTIVE LEAFLET MAP -->
-                <div class="relative rounded-3xl overflow-hidden border border-slate-200 shadow-inner">
-                    <div id="map"></div>
-                </div>
-                <p class="text-[11px] text-slate-400 mt-3 text-center"><i class="fa-solid fa-circle-info"></i> Klik pada pin lingkaran di peta untuk melihat detail status risiko dan jumlah kasus per desa.</p>
-            </div>
-        </section>
-
-        <!-- ================= TAB 4: JADWAL LINTAS SEKTOR ================= -->
-        <section id="tab-jadwal" class="hidden space-y-6 animate-fadeIn">
-            <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100">
-                <div class="mb-6">
-                    <h2 class="text-2xl font-extrabold text-slate-900">Jadwal Aksi & Koordinasi Lintas Sektor</h2>
-                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Agenda gotong royong massal dan penyuluhan kesehatan se-Kecamatan Pasongsongan.</p>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm text-slate-600">
-                        <thead class="bg-slate-50 text-slate-700 uppercase text-xs font-extrabold tracking-wider">
-                            <tr>
-                                <th class="px-5 py-4 rounded-l-2xl">Tanggal & Waktu</th>
-                                <th class="px-5 py-4">Kegiatan</th>
-                                <th class="px-5 py-4">Lokasi / Sasaran</th>
-                                <th class="px-5 py-4">Penanggung Jawab</th>
-                                <th class="px-5 py-4 rounded-r-2xl">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100 font-medium text-xs sm:text-sm">
-                            <tr class="hover:bg-slate-50/80 transition">
-                                <td class="px-5 py-4 font-bold text-slate-900">Minggu, 20 Sep 2026<br><span class="text-xs text-slate-400 font-normal">07:00 - Selesai</span></td>
-                                <td class="px-5 py-4 font-bold text-slate-900">Gerakan Serentak PSN & 3M Plus Kecamatan</td>
-                                <td class="px-5 py-4">Seluruh Desa se-Kecamatan Pasongsongan</td>
-                                <td class="px-5 py-4">Kecamatan & Puskesmas Pasongsongan</td>
-                                <td class="px-5 py-4"><span class="bg-amber-100 text-amber-800 text-xs px-3 py-1 rounded-full font-bold">Akan Datang</span></td>
-                            </tr>
-                            <tr class="hover:bg-slate-50/80 transition">
-                                <td class="px-5 py-4 font-bold text-slate-900">Selasa, 22 Sep 2026<br><span class="text-xs text-slate-400 font-normal">09:00 - 11:00</span></td>
-                                <td class="px-5 py-4 font-bold text-slate-900">Penyuluhan Kader Jumantik & Kepala Desa</td>
-                                <td class="px-5 py-4">Pendopo Kantor Kecamatan Pasongsongan</td>
-                                <td class="px-5 py-4">Tim Kesehatan Puskesmas Sumenep</td>
-                                <td class="px-5 py-4"><span class="bg-amber-100 text-amber-800 text-xs px-3 py-1 rounded-full font-bold">Terjadwal</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4">
+                <div class="p-4 bg-emerald-50 text-emerald-600 rounded-2xl"><i class="fa-solid fa-shield-check text-2xl"></i></div>
+                <div>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Desa Waspada</p>
+                    <h3 class="text-2xl font-extrabold text-slate-900 mt-0.5">0 Desa</h3>
+                    <p class="text-xs text-emerald-600 font-semibold mt-0.5">Seluruh Desa Zona Aman</p>
                 </div>
             </div>
-        </section>
-
-        <!-- ================= TAB 5: EDUKASI 3M+ ================= -->
-        <section id="tab-edukasi" class="hidden space-y-6 animate-fadeIn">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 card-hover flex flex-col justify-between">
-                    <div>
-                        <div class="w-14 h-14 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-2xl font-black mb-6">1</div>
-                        <h3 class="font-extrabold text-xl text-slate-900 mb-3">MENGURAS</h3>
-                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">Menguras dan menyikat tempat penampungan air seperti bak mandi, ember, tempayan, dan gentong air secara rutin minimal seminggu sekali.</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 card-hover flex flex-col justify-between">
-                    <div>
-                        <div class="w-14 h-14 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-2xl font-black mb-6">2</div>
-                        <h3 class="font-extrabold text-xl text-slate-900 mb-3">MENUTUP</h3>
-                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">Menutup rapat-rapat segala bentuk tempat penampungan air seperti drum dan tandon air agar nyamuk tidak dapat masuk dan bertelur.</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 card-hover flex flex-col justify-between">
-                    <div>
-                        <div class="w-14 h-14 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-2xl font-black mb-6">3</div>
-                        <h3 class="font-extrabold text-xl text-slate-900 mb-3">MENDAUR ULANG</h3>
-                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">Memanfaatkan atau mendaur ulang barang-barang bekas di sekitar pekarangan rumah (kaleng, botol plastik, ban bekas).</p>
-                    </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4">
+                <div class="p-4 bg-sky-50 text-sky-600 rounded-2xl"><i class="fa-solid fa-clipboard-check text-2xl"></i></div>
+                <div>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Rumah Diperiksa</p>
+                    <h3 class="text-2xl font-extrabold text-slate-900 mt-0.5">0</h3>
+                    <p class="text-xs text-sky-600 font-semibold mt-0.5">Menunggu Data Masuk</p>
                 </div>
             </div>
-        </section>
-
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4">
+                <div class="p-4 bg-sky-50 text-sky-600 rounded-2xl"><i class="fa-solid fa-handshake-angle text-2xl"></i></div>
+                <div>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Aksi Lintas Sektor</p>
+                    <h3 class="text-2xl font-extrabold text-slate-900 mt-0.5">0 Kali</h3>
+                    <p class="text-xs text-sky-600 font-semibold mt-0.5">Agenda Siap Dimulai</p>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- Footer -->
@@ -361,106 +160,17 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
             <p class="font-medium">&copy; 2026 BATAS SARUNG MERAH - Kecamatan Pasongsongan, Kabupaten Sumenep.</p>
             <div class="flex space-x-6 font-semibold">
-                <span class="hover:text-rose-600 cursor-pointer">Kantor Kecamatan</span>
-                <span class="hover:text-rose-600 cursor-pointer">Puskesmas</span>
-                <span class="hover:text-rose-600 cursor-pointer">Kader Jumantik</span>
+                <a href="index.html" class="hover:text-rose-600">Kantor Kecamatan</a>
+                <a href="index.html" class="hover:text-rose-600">Puskesmas</a>
+                <a href="index.html" class="hover:text-rose-600">Kader Jumantik</a>
             </div>
         </div>
     </footer>
 
-    <!-- Leaflet JS Script -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-    <!-- JavaScript for Tab Switching & Interactive Map -->
     <script>
-        let map = null;
-
-        function switchTab(tabId) {
-            const tabs = ['dashboard', 'laporan', 'peta', 'jadwal', 'edukasi'];
-            tabs.forEach(t => {
-                const section = document.getElementById(`tab-${t}`);
-                const navBtn = document.getElementById(`nav-${t}`);
-                if (t === tabId) {
-                    section.classList.remove('hidden');
-                    if (navBtn) {
-                        navBtn.className = "tab-btn active pb-1 transition";
-                    }
-                    if (t === 'peta') {
-                        setTimeout(initMap, 200);
-                    }
-                } else {
-                    section.classList.add('hidden');
-                    if (navBtn) {
-                        navBtn.className = "tab-btn text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent";
-                    }
-                }
-            });
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function initMap() {
-            if (map !== null) {
-                map.invalidateSize();
-                return;
-            }
-
-            // Koordinat pusat Kecamatan Pasongsongan yang disesuaikan ke area daratan
-            const pasongsonganCenter = [-6.930, 113.660];
-
-            // Inisialisasi Peta dengan zoom level 12
-            map = L.map('map').setView(pasongsonganCenter, 12);
-
-            // Tambahkan Tile Layer (OpenStreetMap)
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-
-            // Data Zona Risiko per Desa di Pasongsongan (Koordinat valid di daratan)
-            const zonaDesa = [
-                { name: "Desa Pasongsongan", lat: -6.902, lng: 113.646, status: "Waspada", kasus: "2 Kasus Aktif", color: "#f59e0b" },
-                { name: "Desa Lebeng Timur", lat: -6.951, lng: 113.677, status: "Waspada", kasus: "1 Kasus Aktif", color: "#f59e0b" },
-                { name: "Desa Lebeng Barat", lat: -6.948, lng: 113.649, status: "Aman", kasus: "Nol Kasus (ABJ > 95%)", color: "#10b981" },
-                { name: "Desa Panaongan", lat: -6.899, lng: 113.668, status: "Aman", kasus: "Nol Kasus", color: "#10b981" },
-                { name: "Desa Montorna", lat: -6.991, lng: 113.623, status: "Aman", kasus: "Nol Kasus", color: "#10b981" },
-                { name: "Desa Prancak", lat: -6.987, lng: 113.650, status: "Aman", kasus: "Nol Kasus", color: "#10b981" },
-                { name: "Desa Soddara", lat: -6.924, lng: 113.685, status: "Aman", kasus: "Nol Kasus", color: "#10b981" },
-                { name: "Desa Rajun", lat: -6.954, lng: 113.701, status: "Aman", kasus: "Nol Kasus", color: "#10b981" },
-                { name: "Desa Padang Dangan", lat: -6.898, lng: 113.689, status: "Aman", kasus: "Nol Kasus", color: "#10b981" }
-            ];
-
-            // Tambahkan Marker dan Lingkaran Zona ke Peta
-            zonaDesa.forEach(desa => {
-                const circle = L.circle([desa.lat, desa.lng], {
-                    color: desa.color,
-                    fillColor: desa.color,
-                    fillOpacity: 0.4,
-                    radius: 700
-                }).addTo(map);
-
-                circle.bindPopup(`
-                    <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 4px;">
-                        <b style="font-size: 14px; color: #0F172A;">${desa.name}</b><br>
-                        <span style="font-size: 12px; color: #64748B;">Status: <strong style="color: ${desa.color};">${desa.status}</strong></span><br>
-                        <span style="font-size: 12px; color: #64748B;">Keterangan: ${desa.kasus}</span>
-                    </div>
-                `);
-            });
-        }
-
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
-        }
-
-        function handleLaporan(event) {
-            event.preventDefault();
-            const alertBox = document.getElementById('alertSuccess');
-            alertBox.classList.remove('hidden');
-            document.getElementById('formPSN').reset();
-            setTimeout(() => {
-                alertBox.classList.add('hidden');
-            }, 6000);
         }
     </script>
 </body>
