@@ -14,17 +14,8 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        primary: '#E11D48',
-                        primaryDark: '#BE123C',
-                        secondary: '#0F172A',
-                        accent: '#0284C7',
-                        success: '#059669',
-                        warning: '#D97706'
-                    },
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif']
-                    }
+                    colors: { primary: '#E11D48', primaryDark: '#BE123C', secondary: '#0F172A', accent: '#0284C7', success: '#059669', warning: '#D97706' },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
                 }
             }
         }
@@ -33,7 +24,7 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; color: #1E293B; }
         .hero-gradient { background: linear-gradient(135deg, #990000 0%, #CC0000 50%, #FF3333 100%); }
         .card-hover { transition: all 0.3s ease; }
-        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.08); }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 25px -5px rgba(0, 0, 0, 0.08); }
         .nav-active { color: #E11D48; border-bottom: 3px solid #E11D48; font-weight: 700; }
     </style>
 </head>
@@ -85,7 +76,7 @@
         </div>
     </header>
 
-    <!-- Main Content: Dashboard -->
+    <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full space-y-8">
         <div class="hero-gradient rounded-3xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8">
             <div class="relative z-10 max-w-2xl space-y-4">
@@ -109,47 +100,47 @@
             <div class="relative z-10 w-full lg:w-auto flex justify-center">
                 <div class="bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-white/25 text-center shadow-2xl min-w-[260px]">
                     <p class="text-xs uppercase tracking-widest text-rose-200 font-bold">Angka Bebas Jentik (ABJ)</p>
-                    <p class="text-6xl font-black mt-3 text-white tracking-tight">100%</p>
+                    <p id="statABJ" class="text-6xl font-black mt-3 text-white tracking-tight">100%</p>
                     <div class="mt-4 inline-flex items-center space-x-1.5 bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full text-xs font-bold border border-emerald-500/30">
                         <i class="fa-solid fa-circle-check"></i>
-                        <span>Kondisi Wilayah Bersih / Aman</span>
+                        <span>Real-time dari Database</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Stats Grid (Data Direset ke 0) -->
+        <!-- Stats Grid (Membaca dari Firestore) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4">
-                <div class="p-4 bg-emerald-50 text-emerald-600 rounded-2xl"><i class="fa-solid fa-bed-pulse text-2xl"></i></div>
+                <div class="p-4 bg-rose-50 text-rose-600 rounded-2xl"><i class="fa-solid fa-bed-pulse text-2xl"></i></div>
                 <div>
                     <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Kasus Aktif DBD</p>
-                    <h3 class="text-2xl font-extrabold text-slate-900 mt-0.5">0 Orang</h3>
-                    <p class="text-xs text-emerald-600 font-semibold mt-0.5">Tidak Ada Kasus Aktif</p>
+                    <h3 id="statKasus" class="text-2xl font-extrabold text-slate-900 mt-0.5">0 Orang</h3>
+                    <p class="text-xs text-rose-600 font-semibold mt-0.5">Laporan Pasien Masuk</p>
                 </div>
             </div>
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4">
-                <div class="p-4 bg-emerald-50 text-emerald-600 rounded-2xl"><i class="fa-solid fa-shield-check text-2xl"></i></div>
+                <div class="p-4 bg-amber-50 text-amber-600 rounded-2xl"><i class="fa-solid fa-triangle-exclamation text-2xl"></i></div>
                 <div>
                     <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Desa Waspada</p>
-                    <h3 class="text-2xl font-extrabold text-slate-900 mt-0.5">0 Desa</h3>
-                    <p class="text-xs text-emerald-600 font-semibold mt-0.5">Seluruh Desa Zona Aman</p>
+                    <h3 id="statWaspada" class="text-2xl font-extrabold text-slate-900 mt-0.5">0 Desa</h3>
+                    <p class="text-xs text-amber-600 font-semibold mt-0.5">Indikasi Jentik Positif</p>
                 </div>
             </div>
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4">
-                <div class="p-4 bg-sky-50 text-sky-600 rounded-2xl"><i class="fa-solid fa-clipboard-check text-2xl"></i></div>
+                <div class="p-4 bg-emerald-50 text-emerald-600 rounded-2xl"><i class="fa-solid fa-clipboard-check text-2xl"></i></div>
                 <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Rumah Diperiksa</p>
-                    <h3 class="text-2xl font-extrabold text-slate-900 mt-0.5">0</h3>
-                    <p class="text-xs text-sky-600 font-semibold mt-0.5">Menunggu Data Masuk</p>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Total Laporan Masuk</p>
+                    <h3 id="statRumah" class="text-2xl font-extrabold text-slate-900 mt-0.5">0</h3>
+                    <p class="text-xs text-emerald-600 font-semibold mt-0.5">Pemeriksaan Warga</p>
                 </div>
             </div>
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4">
                 <div class="p-4 bg-sky-50 text-sky-600 rounded-2xl"><i class="fa-solid fa-handshake-angle text-2xl"></i></div>
                 <div>
                     <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Aksi Lintas Sektor</p>
-                    <h3 class="text-2xl font-extrabold text-slate-900 mt-0.5">0 Kali</h3>
-                    <p class="text-xs text-sky-600 font-semibold mt-0.5">Agenda Siap Dimulai</p>
+                    <h3 id="statJadwal" class="text-2xl font-extrabold text-slate-900 mt-0.5">0 Agenda</h3>
+                    <p class="text-xs text-sky-600 font-semibold mt-0.5">Jadwal Terdaftar</p>
                 </div>
             </div>
         </div>
@@ -159,18 +150,65 @@
     <footer class="bg-white border-t border-slate-200 mt-16 py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
             <p class="font-medium">&copy; 2026 BATAS SARUNG MERAH - Kecamatan Pasongsongan, Kabupaten Sumenep.</p>
-            <div class="flex space-x-6 font-semibold">
-                <a href="index.html" class="hover:text-rose-600">Kantor Kecamatan</a>
-                <a href="index.html" class="hover:text-rose-600">Puskesmas</a>
-                <a href="index.html" class="hover:text-rose-600">Kader Jumantik</a>
-            </div>
         </div>
     </footer>
 
-    <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
+    <!-- Firebase Reader Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBaljRnifVqGBvM00thWpkorY3VM-owF8g",
+            authDomain: "batas-sarung-merah.firebaseapp.com",
+            databaseURL: "https://batas-sarung-merah-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "batas-sarung-merah",
+            storageBucket: "batas-sarung-merah.firebasestorage.app",
+            messagingSenderId: "243467238033",
+            appId: "1:243467238033:web:ef6849be3de989c7771d30",
+            measurementId: "G-SNVQ1SB461"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function muatStatistikDashboard() {
+            try {
+                // Ambil data laporan
+                const laporanSnap = await getDocs(collection(db, "laporan_dbd"));
+                let totalKasus = 0;
+                let totalLaporan = laporanSnap.size;
+                let desaWaspadaSet = new Set();
+
+                laporanSnap.forEach((doc) => {
+                    const data = doc.data();
+                    if (data.jenisLaporan === 'pasien') {
+                        totalKasus++;
+                    }
+                    if (data.statusJentik === 'Positif Ditemukan Jentik') {
+                        desaWaspadaSet.add(data.desa);
+                    }
+                });
+
+                // Ambil data jadwal aksi
+                const jadwalSnap = await getDocs(collection(db, "jadwal_aksi"));
+                let totalJadwal = jadwalSnap.size;
+
+                // Update UI Dashboard
+                document.getElementById('statKasus').innerText = `${totalKasus} Orang`;
+                document.getElementById('statRumah').innerText = totalLaporan;
+                document.getElementById('statWaspada').innerText = `${desaWaspadaSet.size} Desa`;
+                document.getElementById('statJadwal').innerText = `${totalJadwal} Agenda`;
+
+            } catch (error) {
+                console.error("Gagal memuat data statistik dari Firebase:", error);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", muatStatistikDashboard);
+
+        window.toggleMobileMenu = function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
         }
     </script>
 </body>

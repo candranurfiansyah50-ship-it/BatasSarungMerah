@@ -69,10 +69,9 @@
         </div>
     </header>
 
-    <!-- Main Content: Jadwal Aksi -->
+    <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full space-y-8">
         
-        <!-- Header Section & Tombol Input -->
         <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
                 <h2 class="text-2xl font-extrabold text-slate-900">Jadwal Aksi & Koordinasi Lintas Sektor</h2>
@@ -84,8 +83,8 @@
             </button>
         </div>
 
-        <!-- Form Input Jadwal (Hidden secara default, muncul saat tombol diklik) -->
-        <div id="formContainer" class="hidden bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-rose-100 animate-fadeIn">
+        <!-- Form Input Jadwal -->
+        <div id="formContainer" class="hidden bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-rose-100">
             <h3 class="text-lg font-extrabold text-slate-900 mb-4 flex items-center space-x-2">
                 <i class="fa-solid fa-calendar-plus text-rose-600"></i>
                 <span>Formulir Pengaturan Jadwal Aksi Baru</span>
@@ -94,35 +93,35 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Tanggal Pelaksanaan</label>
-                        <input type="date" id="inputTanggal" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition">
+                        <input type="date" id="inputTanggal" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Waktu (Jam)</label>
-                        <input type="text" id="inputWaktu" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition" placeholder="Contoh: 07:00 - Selesai">
+                        <input type="text" id="inputWaktu" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600" placeholder="Contoh: 07:00 - Selesai">
                     </div>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Nama Kegiatan</label>
-                        <input type="text" id="inputKegiatan" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition" placeholder="Contoh: Gerakan Serentak PSN">
+                        <input type="text" id="inputKegiatan" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600" placeholder="Contoh: Gerakan Serentak PSN">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Lokasi / Sasaran</label>
-                        <input type="text" id="inputLokasi" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition" placeholder="Contoh: Desa Pasongsongan">
+                        <input type="text" id="inputLokasi" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600" placeholder="Contoh: Desa Pasongsongan">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Penanggung Jawab</label>
-                        <input type="text" id="inputPJ" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition" placeholder="Contoh: Puskesmas Pasongsongan">
+                        <input type="text" id="inputPJ" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600" placeholder="Contoh: Puskesmas Pasongsongan">
                     </div>
                 </div>
                 <div class="pt-2 flex justify-end space-x-3">
-                    <button type="button" onclick="toggleFormJadwal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">Batal</button>
-                    <button type="submit" class="px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-md transition">Simpan & Publikasikan Jadwal</button>
+                    <button type="button" onclick="toggleFormJadwal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl">Batal</button>
+                    <button type="submit" id="btnSimpanJadwal" class="px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-md">Simpan ke Firebase</button>
                 </div>
             </form>
         </div>
 
-        <!-- Tabel Daftar Jadwal -->
+        <!-- Tabel Daftar Jadwal (Real-time dari Firestore) -->
         <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100">
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm text-slate-600">
@@ -136,14 +135,10 @@
                         </tr>
                     </thead>
                     <tbody id="tabelJadwalBody" class="divide-y divide-slate-100 font-medium text-xs sm:text-sm">
-                        <!-- Default Kosong Menunggu Input -->
-                        <tr id="emptyRow">
+                        <tr>
                             <td colspan="5" class="px-5 py-12 text-center text-slate-400">
-                                <div class="flex flex-col items-center justify-center space-y-2">
-                                    <i class="fa-solid fa-calendar-xmark text-3xl text-slate-300"></i>
-                                    <p class="font-semibold text-sm">Belum ada agenda aksi atau jadwal kegiatan yang dipublikasikan.</p>
-                                    <p class="text-xs text-slate-400">Gunakan tombol "Tambah Jadwal Baru" di atas untuk memasukkan agenda baru.</p>
-                                </div>
+                                <i class="fa-solid fa-spinner fa-spin text-2xl text-rose-600 mb-2"></i>
+                                <p class="text-xs">Memuat data jadwal dari database Firebase...</p>
                             </td>
                         </tr>
                     </tbody>
@@ -154,18 +149,71 @@
 
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 mt-16 py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-            <p class="font-medium">&copy; 2026 BATAS SARUNG MERAH - Kecamatan Pasongsongan, Kabupaten Sumenep.</p>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-500">
+            <p>&copy; 2026 BATAS SARUNG MERAH - Kecamatan Pasongsongan, Kabupaten Sumenep.</p>
         </div>
     </footer>
 
-    <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
+    <!-- Firebase Script Writer & Reader -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBaljRnifVqGBvM00thWpkorY3VM-owF8g",
+            authDomain: "batas-sarung-merah.firebaseapp.com",
+            databaseURL: "https://batas-sarung-merah-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "batas-sarung-merah",
+            storageBucket: "batas-sarung-merah.firebasestorage.app",
+            messagingSenderId: "243467238033",
+            appId: "1:243467238033:web:ef6849be3de989c7771d30",
+            measurementId: "G-SNVQ1SB461"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function muatJadwal() {
+            const tbody = document.getElementById('tabelJadwalBody');
+            try {
+                const querySnapshot = await getDocs(collection(db, "jadwal_aksi"));
+
+                if (querySnapshot.empty) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="px-5 py-12 text-center text-slate-400">
+                                <i class="fa-solid fa-calendar-xmark text-3xl text-slate-300 mb-2"></i>
+                                <p class="font-semibold text-sm">Belum ada agenda aksi atau jadwal kegiatan di database.</p>
+                            </td>
+                        </tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = "";
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const formattedDate = new Date(data.tanggal).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
+                    
+                    const row = document.createElement('tr');
+                    row.className = "hover:bg-slate-50/80 transition";
+                    row.innerHTML = `
+                        <td class="px-5 py-4 font-bold text-slate-900">${formattedDate}<br><span class="text-xs text-slate-400 font-normal">${data.waktu}</span></td>
+                        <td class="px-5 py-4 font-bold text-slate-900">${data.kegiatan}</td>
+                        <td class="px-5 py-4">${data.lokasi}</td>
+                        <td class="px-5 py-4">${data.pj}</td>
+                        <td class="px-5 py-4"><span class="bg-amber-100 text-amber-800 text-xs px-3 py-1 rounded-full font-bold">Terjadwal</span></td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                console.error("Gagal memuat jadwal: ", error);
+                tbody.innerHTML = `<tr><td colspan="5" class="px-5 py-6 text-center text-rose-500 text-xs">Gagal memuat data dari Firebase.</td></tr>`;
+            }
         }
 
-        function toggleFormJadwal() {
+        document.addEventListener("DOMContentLoaded", muatJadwal);
+
+        window.toggleFormJadwal = function() {
             const formContainer = document.getElementById('formContainer');
             const textToggle = document.getElementById('textToggleForm');
             const iconToggle = document.getElementById('iconToggleForm');
@@ -180,40 +228,38 @@
             }
         }
 
-        function tambahJadwal(event) {
+        window.tambahJadwal = async function(event) {
             event.preventDefault();
+            const btnSimpan = document.getElementById('btnSimpanJadwal');
+            btnSimpan.disabled = true;
+            btnSimpan.innerText = "Menyimpan...";
 
-            const tanggal = document.getElementById('inputTanggal').value;
-            const waktu = document.getElementById('inputWaktu').value;
-            const kegiatan = document.getElementById('inputKegiatan').value;
-            const lokasi = document.getElementById('inputLokasi').value;
-            const pj = document.getElementById('inputPJ').value;
+            try {
+                const jadwalBaru = {
+                    tanggal: document.getElementById('inputTanggal').value,
+                    waktu: document.getElementById('inputWaktu').value,
+                    kegiatan: document.getElementById('inputKegiatan').value,
+                    lokasi: document.getElementById('inputLokasi').value,
+                    pj: document.getElementById('inputPJ').value,
+                    createdAt: new Date().toISOString()
+                };
 
-            // Format tanggal agar lebih rapi (YYYY-MM-DD ke Format Lokal)
-            const formattedDate = new Date(tanggal).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
-
-            const tbody = document.getElementById('tabelJadwalBody');
-            const emptyRow = document.getElementById('emptyRow');
-            if (emptyRow) {
-                emptyRow.remove(); // Hapus pesan kosong jika ada
+                await addDoc(collection(db, "jadwal_aksi"), jadwalBaru);
+                
+                document.getElementById('formJadwalAksi').reset();
+                toggleFormJadwal();
+                muatJadwal(); 
+            } catch (error) {
+                console.error("Gagal menyimpan jadwal: ", error);
+                alert("Gagal menyimpan jadwal ke Firebase.");
+            } finally {
+                btnSimpan.disabled = false;
+                btnSimpan.innerText = "Simpan ke Firebase";
             }
+        }
 
-            // Buat baris baru pada tabel
-            const newRow = document.createElement('tr');
-            newRow.className = "hover:bg-slate-50/80 transition";
-            newRow.innerHTML = `
-                <td class="px-5 py-4 font-bold text-slate-900">${formattedDate}<br><span class="text-xs text-slate-400 font-normal">${waktu}</span></td>
-                <td class="px-5 py-4 font-bold text-slate-900">${kegiatan}</td>
-                <td class="px-5 py-4">${lokasi}</td>
-                <td class="px-5 py-4">${pj}</td>
-                <td class="px-5 py-4"><span class="bg-amber-100 text-amber-800 text-xs px-3 py-1 rounded-full font-bold">Terjadwal</span></td>
-            `;
-
-            tbody.appendChild(newRow);
-
-            // Reset Form & Tutup
-            document.getElementById('formJadwalAksi').reset();
-            toggleFormJadwal();
+        window.toggleMobileMenu = function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
         }
     </script>
 </body>
