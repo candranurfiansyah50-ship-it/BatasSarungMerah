@@ -173,12 +173,15 @@
         const db = getFirestore(app);
 
         async function muatStatistikDashboard() {
+            let totalKasus = 0;
+            let totalLaporan = 0;
+            let desaWaspadaSet = new Set();
+            let totalJadwal = 0;
+
+            // 1. Ambil data laporan dari koleksi "laporan_dbd" secara aman
             try {
-                // Ambil data laporan
                 const laporanSnap = await getDocs(collection(db, "laporan_dbd"));
-                let totalKasus = 0;
-                let totalLaporan = laporanSnap.size;
-                let desaWaspadaSet = new Set();
+                totalLaporan = laporanSnap.size;
 
                 laporanSnap.forEach((doc) => {
                     const data = doc.data();
@@ -189,20 +192,23 @@
                         desaWaspadaSet.add(data.desa);
                     }
                 });
-
-                // Ambil data jadwal aksi
-                const jadwalSnap = await getDocs(collection(db, "jadwal_aksi"));
-                let totalJadwal = jadwalSnap.size;
-
-                // Update UI Dashboard
-                document.getElementById('statKasus').innerText = `${totalKasus} Orang`;
-                document.getElementById('statRumah').innerText = totalLaporan;
-                document.getElementById('statWaspada').innerText = `${desaWaspadaSet.size} Desa`;
-                document.getElementById('statJadwal').innerText = `${totalJadwal} Agenda`;
-
             } catch (error) {
-                console.error("Gagal memuat data statistik dari Firebase:", error);
+                console.warn("Gagal memuat koleksi laporan_dbd (mungkin masih kosong):", error);
             }
+
+            // 2. Ambil data jadwal dari koleksi "jadwal_aksi" secara aman
+            try {
+                const jadwalSnap = await getDocs(collection(db, "jadwal_aksi"));
+                totalJadwal = jadwalSnap.size;
+            } catch (error) {
+                console.warn("Gagal memuat koleksi jadwal_aksi (mungkin belum dibuat):", error);
+            }
+
+            // Update UI Dashboard
+            document.getElementById('statKasus').innerText = `${totalKasus} Orang`;
+            document.getElementById('statRumah').innerText = totalLaporan;
+            document.getElementById('statWaspada').innerText = `${desaWaspadaSet.size} Desa`;
+            document.getElementById('statJadwal').innerText = `${totalJadwal} Agenda`;
         }
 
         document.addEventListener("DOMContentLoaded", muatStatistikDashboard);
