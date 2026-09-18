@@ -27,8 +27,39 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
 
+    <!-- Modal / Tampilan Login Admin Khusus Halaman Ini -->
+    <div id="loginModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-100 space-y-6">
+            <div class="text-center space-y-2">
+                <div class="bg-rose-100 text-rose-600 w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-2xl font-bold shadow-inner">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h2 class="text-2xl font-extrabold text-slate-900">Autentikasi Admin</h2>
+                <p class="text-xs text-slate-500">Masukkan akun khusus pengurus/admin untuk mengakses halaman ini.</p>
+            </div>
+            
+            <form id="formLoginAdmin" onsubmit="prosesLoginAdmin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Email Admin</label>
+                    <input type="email" id="adminEmail" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600" placeholder="admin@batassarungmerah.com">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Password</label>
+                    <input type="password" id="adminPassword" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600" placeholder="••••••••">
+                </div>
+                <div id="loginError" class="text-rose-600 text-xs font-medium text-center hidden"></div>
+                <button type="submit" id="btnSubmitLogin" class="w-full py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-rose-600/20 transition">
+                    Masuk ke Halaman Admin
+                </button>
+            </form>
+            <div class="text-center">
+                <a href="index.html" class="text-xs text-slate-400 hover:text-slate-600 font-semibold"><i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Beranda Utama</a>
+            </div>
+        </div>
+    </div>
+
     <!-- Header / Navigasi -->
-    <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-100">
+    <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-40 border-b border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center space-x-3">
                 <div class="bg-gradient-to-br from-rose-600 to-red-700 text-white p-3.5 rounded-2xl shadow-lg shadow-red-500/20 flex items-center justify-center">
@@ -53,6 +84,11 @@
             </nav>
 
             <div class="flex items-center space-x-3">
+                <div class="text-xs font-bold text-slate-700 flex items-center gap-2 bg-slate-100 px-3 py-2 rounded-xl">
+                    <i class="fa-solid fa-user-shield text-rose-600"></i>
+                    <span id="adminEmailLabel">Admin Aktif</span>
+                    <button onclick="logoutAdmin()" class="ml-2 text-rose-600 hover:text-rose-800 underline">Keluar</button>
+                </div>
                 <button onclick="toggleMobileMenu()" class="lg:hidden text-slate-700 p-2 rounded-lg hover:bg-slate-100 transition">
                     <i class="fa-solid fa-bars text-xl"></i>
                 </button>
@@ -110,7 +146,7 @@
             </form>
         </div>
 
-        <!-- Bagian 1: Laporan Lengkap Masuk dari Klien (File Tindak Lanjut & Data Lengkap) -->
+        <!-- Bagian 1: Laporan Lengkap Masuk dari Klien (Tanpa tombol hapus) -->
         <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 space-y-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-100">
                 <div>
@@ -130,13 +166,12 @@
                             <th class="px-5 py-4 rounded-l-2xl">Identitas Pelapor & Kontak</th>
                             <th class="px-5 py-4">Desa / Lokasi</th>
                             <th class="px-5 py-4">Jenis Laporan</th>
-                            <th class="px-5 py-4">Detail Lengkap Pasien / Jentik</th>
-                            <th class="px-5 py-4 rounded-r-2xl">Koordinat</th>
+                            <th class="px-5 py-4 rounded-r-2xl">Detail Lengkap Pasien / Jentik</th>
                         </tr>
                     </thead>
                     <tbody id="tabelLaporanBody" class="divide-y divide-slate-100 font-medium text-xs sm:text-sm">
                         <tr>
-                            <td colspan="5" class="px-5 py-12 text-center text-slate-400">
+                            <td colspan="4" class="px-5 py-12 text-center text-slate-400">
                                 <i class="fa-solid fa-spinner fa-spin text-2xl text-rose-600 mb-2"></i>
                                 <p class="text-xs">Memuat data laporan lengkap dari database...</p>
                             </td>
@@ -146,7 +181,7 @@
             </div>
         </div>
 
-        <!-- Bagian 2: Jadwal Aksi & Rencana Tindak Lanjut -->
+        <!-- Bagian 2: Jadwal Aksi & Rencana Tindak Lanjut (Tombol hapus tetap ada untuk jadwal) -->
         <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 space-y-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-100">
                 <div>
@@ -174,7 +209,7 @@
                             <th class="px-5 py-4">Kegiatan</th>
                             <th class="px-5 py-4">Lokasi / Sasaran</th>
                             <th class="px-5 py-4">Penanggung Jawab</th>
-                            <th class="px-5 py-4 rounded-r-2xl">Status</th>
+                            <th class="px-5 py-4 rounded-r-2xl">Aksi Admin</th>
                         </tr>
                     </thead>
                     <tbody id="tabelJadwalBody" class="divide-y divide-slate-100 font-medium text-xs sm:text-sm">
@@ -198,10 +233,11 @@
         </div>
     </footer>
 
-    <!-- Firebase Script Writer & Reader -->
+    <!-- Firebase Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBaljRnifVqGBvM00thWpkorY3VM-owF8g",
@@ -216,10 +252,54 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const auth = getAuth(app);
 
         let cacheDataJadwal = [];
 
-        // Fungsi memuat data Jadwal / Rencana Tindak Lanjut
+        onAuthStateChanged(auth, (user) => {
+            const loginModal = document.getElementById('loginModal');
+            const adminEmailLabel = document.getElementById('adminEmailLabel');
+            if (user) {
+                loginModal.classList.add('hidden');
+                adminEmailLabel.innerText = user.email;
+                muatJadwal();
+                muatLaporanTerbaru();
+            } else {
+                loginModal.classList.remove('hidden');
+            }
+        });
+
+        window.prosesLoginAdmin = async function(event) {
+            event.preventDefault();
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            const errorDiv = document.getElementById('loginError');
+            const btnSubmit = document.getElementById('btnSubmitLogin');
+
+            errorDiv.classList.add('hidden');
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = "Memeriksa...";
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                console.error("Login gagal:", error);
+                errorDiv.innerText = "Gagal masuk: Email atau password salah.";
+                errorDiv.classList.remove('hidden');
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = "Masuk ke Halaman Admin";
+            }
+        }
+
+        window.logoutAdmin = async function() {
+            try {
+                await signOut(auth);
+            } catch (error) {
+                console.error("Gagal keluar:", error);
+            }
+        }
+
         async function muatJadwal() {
             const tbody = document.getElementById('tabelJadwalBody');
             try {
@@ -238,8 +318,8 @@
                 }
 
                 tbody.innerHTML = "";
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
+                querySnapshot.forEach((docItem) => {
+                    const data = docItem.data();
                     cacheDataJadwal.push(data);
                     const formattedDate = data.tanggal ? new Date(data.tanggal).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' }) : '-';
                     
@@ -250,7 +330,11 @@
                         <td class="px-5 py-4 font-bold text-slate-900">${data.kegiatan || '-'}</td>
                         <td class="px-5 py-4">${data.lokasi || '-'}</td>
                         <td class="px-5 py-4">${data.pj || '-'}</td>
-                        <td class="px-5 py-4"><span class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1 rounded-full font-bold">Terjadwal</span></td>
+                        <td class="px-5 py-4">
+                            <button onclick="hapusDokumen('jadwal_aksi', '${docItem.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1">
+                                <i class="fa-solid fa-trash"></i> Hapus
+                            </button>
+                        </td>
                     `;
                     tbody.appendChild(row);
                 });
@@ -260,7 +344,6 @@
             }
         }
 
-        // Fungsi memuat Laporan Lengkap Klien (Dengan Identitas Lengkap untuk Petugas)
         async function muatLaporanTerbaru() {
             const tbody = document.getElementById('tabelLaporanBody');
             try {
@@ -269,7 +352,7 @@
                 if (querySnapshot.empty) {
                     tbody.innerHTML = `
                         <tr>
-                            <td colspan="5" class="px-5 py-12 text-center text-slate-400">
+                            <td colspan="4" class="px-5 py-12 text-center text-slate-400">
                                 <i class="fa-solid fa-folder-open text-3xl text-slate-300 mb-2"></i>
                                 <p class="font-semibold text-sm">Belum ada laporan klien masuk di database.</p>
                             </td>
@@ -278,8 +361,8 @@
                 }
 
                 tbody.innerHTML = "";
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
+                querySnapshot.forEach((docItem) => {
+                    const data = docItem.data();
                     
                     let jenisLaporanBadge = "";
                     let detailInfo = "";
@@ -311,23 +394,27 @@
                         </td>
                         <td class="px-5 py-4">${jenisLaporanBadge}</td>
                         <td class="px-5 py-4 text-sm">${detailInfo}</td>
-                        <td class="px-5 py-4 text-xs font-mono text-slate-500">
-                            Lat: ${data.latitude || '-'}, <br>Lng: ${data.longitude || '-'}<br>
-                            <span class="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded mt-1 inline-block">Data Lengkap</span>
-                        </td>
                     `;
                     tbody.appendChild(row);
                 });
             } catch (error) {
                 console.error("Gagal memuat laporan lengkap: ", error);
-                tbody.innerHTML = `<tr><td colspan="5" class="px-5 py-6 text-center text-rose-500 text-xs">Gagal memuat data laporan dari database Firebase.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" class="px-5 py-6 text-center text-rose-500 text-xs">Gagal memuat data laporan dari database Firebase.</td></tr>`;
             }
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            muatJadwal();
-            muatLaporanTerbaru();
-        });
+        window.hapusDokumen = async function(namaKoleksi, idDokumen) {
+            if (!confirm("Apakah Anda yakin ingin menghapus data ini dari sistem?")) return;
+            try {
+                await deleteDoc(doc(db, namaKoleksi, idDokumen));
+                alert("Data berhasil dihapus.");
+                muatJadwal();
+                muatLaporanTerbaru();
+            } catch (error) {
+                console.error("Gagal menghapus:", error);
+                alert("Gagal menghapus data.");
+            }
+        }
 
         window.unduhLaporan = function() {
             if (cacheDataJadwal.length === 0) {
@@ -336,7 +423,6 @@
             }
 
             let csvContent = "data:text/csv;charset=utf-8,Tanggal,Waktu,Kegiatan,Lokasi/Sasaran,Penanggung Jawab\r\n";
-            
             cacheDataJadwal.forEach(item => {
                 let row = `"${item.tanggal}","${item.waktu}","${item.kegiatan}","${item.lokasi}","${item.pj}"`;
                 csvContent += row + "\r\n";
