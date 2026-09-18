@@ -51,7 +51,7 @@
                 <a href="index.html" class="nav-active pb-1 transition">Dashboard</a>
                 <a href="lapor.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Lapor PSN</a>
                 <a href="peta.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Zona Risiko</a>
-                <a href="jadwal.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Jadwal Aksi</a>
+                <a href="jadwal.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Akses Admin</a>
                 <a href="edukasi.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Edukasi 3M+</a>
             </nav>
 
@@ -71,7 +71,7 @@
             <a href="index.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm bg-rose-50 text-rose-600">Dashboard</a>
             <a href="lapor.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Lapor PSN</a>
             <a href="peta.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Zona Risiko</a>
-            <a href="jadwal.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Jadwal Aksi</a>
+            <a href="jadwal.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Akses Admin</a>
             <a href="edukasi.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Edukasi 3M+</a>
         </div>
     </header>
@@ -111,22 +111,27 @@
 
         <!-- Stats Grid (Membaca dari Firestore) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4">
+            <!-- Kartu Kasus DBD (Toggle Riwayat) -->
+            <div onclick="toggleRiwayatSection()" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4 cursor-pointer hover:border-rose-300 transition">
                 <div class="p-4 bg-rose-50 text-rose-600 rounded-2xl"><i class="fa-solid fa-bed-pulse text-2xl"></i></div>
                 <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Kasus DBD</p>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Kasus DBD <span class="text-[10px] text-rose-500 block font-normal"></span></p>
                     <h3 id="statKasus" class="text-2xl font-extrabold text-slate-900 mt-0.5">0 Orang</h3>
                     <p class="text-xs text-rose-600 font-semibold mt-0.5">Laporan Kasus DBD</p>
                 </div>
             </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4">
+            
+            <!-- Kartu Desa Waspada (Mengarahkan ke halaman peta.html / Zona Risiko) -->
+            <a href="peta.html" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4 cursor-pointer hover:border-amber-300 transition block">
                 <div class="p-4 bg-amber-50 text-amber-600 rounded-2xl"><i class="fa-solid fa-triangle-exclamation text-2xl"></i></div>
                 <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Desa Waspada</p>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Desa Waspada <span class="text-[10px] text-amber-500 block font-normal"></span></p>
                     <h3 id="statWaspada" class="text-2xl font-extrabold text-slate-900 mt-0.5">0 Desa</h3>
                     <p class="text-xs text-amber-600 font-semibold mt-0.5">Indikasi Jentik Positif</p>
                 </div>
-            </div>
+            </a>
+
+            <!-- Kartu Total Laporan Masuk -->
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4">
                 <div class="p-4 bg-emerald-50 text-emerald-600 rounded-2xl"><i class="fa-solid fa-clipboard-check text-2xl"></i></div>
                 <div>
@@ -135,18 +140,20 @@
                     <p class="text-xs text-emerald-600 font-semibold mt-0.5">Pemeriksaan </p>
                 </div>
             </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4">
+
+            <!-- Kartu Akses Admin (Toggle Tabel Daftar Jadwal Aksi Panel) -->
+            <div onclick="toggleJadwalSection()" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4 cursor-pointer hover:border-sky-300 transition">
                 <div class="p-4 bg-sky-50 text-sky-600 rounded-2xl"><i class="fa-solid fa-handshake-angle text-2xl"></i></div>
                 <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Aksi Lintas Sektor</p>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Aksi Lintas Sektor <span class="text-[10px] text-sky-500 block font-normal"></span></p>
                     <h3 id="statJadwal" class="text-2xl font-extrabold text-slate-900 mt-0.5">0 Agenda</h3>
                     <p class="text-xs text-sky-600 font-semibold mt-0.5">Jadwal Terdaftar</p>
                 </div>
             </div>
         </div>
 
-        <!-- TABEL RIWAYAT: Tanpa Kolom Keterangan -->
-        <section class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 space-y-6">
+        <!-- TABEL RIWAYAT DBD: Default disembunyikan -->
+        <section id="riwayatSection" class="hidden bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 space-y-6 transition-all duration-300">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
                 <div>
                     <h3 class="text-xl font-extrabold text-slate-900 flex items-center space-x-2">
@@ -162,7 +169,6 @@
                 </div>
             </div>
 
-            <!-- Tabel Data -->
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
@@ -176,6 +182,42 @@
                     <tbody id="tabelRiwayatBody" class="divide-y divide-slate-100 text-sm text-slate-700">
                         <tr>
                             <td colspan="4" class="text-center py-6 text-slate-400 italic">Memuat data riwayat dari database...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- TABEL DAFTAR JADWAL AKSI: Default disembunyikan, muncul saat kartu Aksi Lintas Sektor diklik -->
+        <section id="jadwalSection" class="hidden bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 space-y-6 transition-all duration-300">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                <div>
+                    <h3 class="text-xl font-extrabold text-slate-900 flex items-center space-x-2">
+                        <i class="fa-solid fa-calendar-days text-sky-600"></i>
+                        <span>Daftar Jadwal Aksi Lintas Sektor</span>
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-1">Agenda kegiatan pemberantasan sarang nyamuk yang dibuat oleh panel.</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-100">
+                        <span class="w-1.5 h-1.5 rounded-full bg-sky-600 mr-1.5 animate-ping"></span> Live Database
+                    </span>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                            <th class="py-3 px-4">Tanggal & Waktu</th>
+                            <th class="py-3 px-4">Agenda / Kegiatan</th>
+                            <th class="py-3 px-4">Lokasi / Desa</th>
+                            <th class="py-3 px-4">Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelJadwalBody" class="divide-y divide-slate-100 text-sm text-slate-700">
+                        <tr>
+                            <td colspan="4" class="text-center py-6 text-slate-400 italic">Memuat daftar jadwal aksi dari database...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -215,6 +257,7 @@
             let desaWaspadaSet = new Set();
             let totalJadwal = 0;
             let listRiwayat = [];
+            let listJadwal = [];
 
             try {
                 const laporanSnap = await getDocs(collection(db, "laporan_dbd"));
@@ -238,6 +281,10 @@
             try {
                 const jadwalSnap = await getDocs(collection(db, "jadwal_aksi"));
                 totalJadwal = jadwalSnap.size;
+
+                jadwalSnap.forEach((doc) => {
+                    listJadwal.push(doc.data());
+                });
             } catch (error) {
                 console.warn("Gagal memuat koleksi jadwal_aksi:", error);
             }
@@ -248,6 +295,7 @@
             document.getElementById('statJadwal').innerText = `${totalJadwal} Agenda`;
 
             renderTabelRiwayat(listRiwayat);
+            renderTabelJadwal(listJadwal);
         }
 
         function renderTabelRiwayat(dataList) {
@@ -259,7 +307,6 @@
                 return;
             }
 
-            // Urutkan data berdasarkan waktu terbaru
             dataList.sort((a, b) => {
                 const timeA = a.timestamp ? new Date(a.timestamp) : 0;
                 const timeB = b.timestamp ? new Date(b.timestamp) : 0;
@@ -283,10 +330,55 @@
             });
         }
 
+        function renderTabelJadwal(dataList) {
+            const tbody = document.getElementById('tabelJadwalBody');
+            tbody.innerHTML = '';
+
+            if (dataList.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-slate-400 italic">Belum ada jadwal aksi yang terdaftar.</td></tr>`;
+                return;
+            }
+
+            dataList.forEach((item) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/80 transition";
+
+                tr.innerHTML = `
+                    <td class="py-3.5 px-4 text-xs text-slate-500 font-medium">${item.tanggal || '-'} ${item.waktu ? '• ' + item.waktu : ''}</td>
+                    <td class="py-3.5 px-4 font-bold text-slate-900">${item.namaKegiatan || item.agenda || '-'}</td>
+                    <td class="py-3.5 px-4 text-slate-700">${item.lokasi || item.desa || '-'}</td>
+                    <td class="py-3.5 px-4 text-xs text-slate-600">${item.keterangan || '-'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
         document.addEventListener("DOMContentLoaded", muatStatistikDashboard);
 
         window.toggleMobileMenu = function() {
             document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        // Fungsi toggle untuk Riwayat DBD
+        window.toggleRiwayatSection = function() {
+            const section = document.getElementById('riwayatSection');
+            const jadwalSec = document.getElementById('jadwalSection');
+            jadwalSec.classList.add('hidden'); // Tutup bagian jadwal jika terbuka
+            section.classList.toggle('hidden');
+            if (!section.classList.contains('hidden')) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Fungsi toggle untuk Daftar Jadwal Aksi Panel
+        window.toggleJadwalSection = function() {
+            const section = document.getElementById('jadwalSection');
+            const riwayatSec = document.getElementById('riwayatSection');
+            riwayatSec.classList.add('hidden'); // Tutup bagian riwayat jika terbuka
+            section.classList.toggle('hidden');
+            if (!section.classList.contains('hidden')) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
         }
     </script>
 </body>
