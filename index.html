@@ -145,7 +145,7 @@
             </div>
         </div>
 
-        <!-- TABEL RIWAYAT: Sesuai Kolom pada Register Pasien DBD -->
+        <!-- TABEL RIWAYAT: Tanpa Kolom Keterangan -->
         <section class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
                 <div>
@@ -171,12 +171,11 @@
                             <th class="py-3 px-4">Pelapor / Warga</th>
                             <th class="py-3 px-4">Desa / Dusun</th>
                             <th class="py-3 px-4">Jenis Laporan</th>
-                            <th class="py-3 px-4">Keterangan / Status Jentik</th>
                         </tr>
                     </thead>
                     <tbody id="tabelRiwayatBody" class="divide-y divide-slate-100 text-sm text-slate-700">
                         <tr>
-                            <td colspan="5" class="text-center py-6 text-slate-400 italic">Memuat data riwayat dari database...</td>
+                            <td colspan="4" class="text-center py-6 text-slate-400 italic">Memuat data riwayat dari database...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -256,7 +255,7 @@
             tbody.innerHTML = '';
 
             if (dataList.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-400 italic">Belum ada riwayat laporan yang masuk.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-slate-400 italic">Belum ada riwayat laporan yang masuk.</td></tr>`;
                 return;
             }
 
@@ -271,12 +270,7 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50/80 transition";
 
-                // Format jenis laporan sesuai data Excel
                 let badgeJenis = `<span class="bg-rose-100 text-rose-700 text-xs font-bold px-2.5 py-1 rounded-full"><i class="fa-solid fa-bed-pulse mr-1"></i> Kasus Pasien Terdampak DBD</span>`;
-
-                // Keterangan / Status Jentik (jika kosong tampilkan strip atau teks sesuai data)
-                let ketStatus = item.statusJentik ? `<span class="text-slate-700">${item.statusJentik}</span>` : `<span class="text-slate-400 italic">Dalam Penanganan / Pemantauan</span>`;
-
                 const tanggalFormatted = item.timestamp ? new Date(item.timestamp).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : '-';
 
                 tr.innerHTML = `
@@ -284,7 +278,6 @@
                     <td class="py-3.5 px-4 font-bold text-slate-900">${item.namaPelapor || '-'}</td>
                     <td class="py-3.5 px-4 text-slate-700">${item.desa || '-'}</td>
                     <td class="py-3.5 px-4">${badgeJenis}</td>
-                    <td class="py-3.5 px-4 text-xs">${ketStatus}</td>
                 `;
                 tbody.appendChild(tr);
             });
