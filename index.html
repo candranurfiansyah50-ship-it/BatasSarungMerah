@@ -99,8 +99,8 @@
             </div>
             <div class="relative z-10 w-full lg:w-auto flex justify-center">
                 <div class="bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-white/25 text-center shadow-2xl min-w-[260px]">
-                    <p class="text-xs uppercase tracking-widest text-rose-200 font-bold">Angka Bebas Jentik (ABJ)</p>
-                    <p id="statABJ" class="text-6xl font-black mt-3 text-white tracking-tight">100%</p>
+                    <p class="text-xs uppercase tracking-widest text-rose-200 font-bold">Kalkulasi Database</p>
+                    <p id="statABJ" class="text-5xl font-black mt-3 text-white tracking-tight">Active</p>
                     <div class="mt-4 inline-flex items-center space-x-1.5 bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full text-xs font-bold border border-emerald-500/30">
                         <i class="fa-solid fa-circle-check"></i>
                         <span>Real-time dari Database</span>
@@ -109,23 +109,23 @@
             </div>
         </div>
 
-        <!-- Stats Grid (Membaca dari Firestore) -->
+        <!-- Stats Grid (Kalkulasi Data Masuk Database) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- 1. Kartu Kasus DBD (Toggle Riwayat) -->
+            <!-- 1. Kartu Kasus DBD -->
             <div onclick="toggleRiwayatSection()" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4 cursor-pointer hover:border-rose-300 transition">
                 <div class="p-4 bg-rose-50 text-rose-600 rounded-2xl"><i class="fa-solid fa-bed-pulse text-2xl"></i></div>
                 <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Kasus DBD <span class="text-[10px] text-rose-500 block font-normal"></span></p>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Kasus DBD</p>
                     <h3 id="statKasus" class="text-2xl font-extrabold text-slate-900 mt-0.5">0 Orang</h3>
-                    <p class="text-xs text-rose-600 font-semibold mt-0.5">Laporan Kasus DBD</p>
+                    <p class="text-xs text-rose-600 font-semibold mt-0.5">Kalkulasi Kasus Masuk</p>
                 </div>
             </div>
             
-            <!-- 2. Kartu Desa Waspada (Mengarahkan ke halaman peta.html / Zona Risiko) -->
+            <!-- 2. Kartu Desa Waspada -->
             <a href="peta.html" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4 cursor-pointer hover:border-amber-300 transition block">
                 <div class="p-4 bg-amber-50 text-amber-600 rounded-2xl"><i class="fa-solid fa-triangle-exclamation text-2xl"></i></div>
                 <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Desa Waspada <span class="text-[10px] text-amber-500 block font-normal"></span></p>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Desa Waspada</p>
                     <h3 id="statWaspada" class="text-2xl font-extrabold text-slate-900 mt-0.5">0 Desa</h3>
                     <p class="text-xs text-amber-600 font-semibold mt-0.5">Indikasi Jentik Positif</p>
                 </div>
@@ -135,37 +135,32 @@
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4">
                 <div class="p-4 bg-emerald-50 text-emerald-600 rounded-2xl"><i class="fa-solid fa-clipboard-check text-2xl"></i></div>
                 <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Total Laporan Masuk</p>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Total Laporan Database</p>
                     <h3 id="statRumah" class="text-2xl font-extrabold text-slate-900 mt-0.5">0</h3>
-                    <p class="text-xs text-emerald-600 font-semibold mt-0.5">Pemeriksaan </p>
+                    <p class="text-xs text-emerald-600 font-semibold mt-0.5">Kalkulasi Data Masuk</p>
                 </div>
             </div>
 
-            <!-- 4. Kartu Aksi Lintas Sektor / Akses Admin (Toggle Tabel Daftar Jadwal Aksi Panel) -->
+            <!-- 4. Kartu Aksi Lintas Sektor (Menampilkan Jadwal dari Akses Admin) -->
             <div onclick="toggleJadwalSection()" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4 cursor-pointer hover:border-sky-300 transition">
                 <div class="p-4 bg-sky-50 text-sky-600 rounded-2xl"><i class="fa-solid fa-handshake-angle text-2xl"></i></div>
                 <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Aksi Lintas Sektor <span class="text-[10px] text-sky-500 block font-normal"></span></p>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Rencana Tindak Lanjut</p>
                     <h3 id="statJadwal" class="text-2xl font-extrabold text-slate-900 mt-0.5">0 Agenda</h3>
-                    <p class="text-xs text-sky-600 font-semibold mt-0.5">Jadwal Terdaftar</p>
+                    <p class="text-xs text-sky-600 font-semibold mt-0.5">Jadwal Tindak Lanjut</p>
                 </div>
             </div>
         </div>
 
-        <!-- TABEL RIWAYAT DBD: Default disembunyikan -->
+        <!-- TABEL KALKULASI RINGKASAN LAPORAN -->
         <section id="riwayatSection" class="hidden bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 space-y-6 transition-all duration-300">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
                 <div>
                     <h3 class="text-xl font-extrabold text-slate-900 flex items-center space-x-2">
                         <i class="fa-solid fa-clipboard-list text-rose-600"></i>
-                        <span>Riwayat Laporan & Kasus DBD Terbaru</span>
+                        <span>Ringkasan Kalkulasi Data Laporan DBD</span>
                     </h3>
-                    <p class="text-xs text-slate-500 mt-1">Data register riwayat pasien terdampak DBD berdasarkan catatan resmi.</p>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-100">
-                        <span class="w-1.5 h-1.5 rounded-full bg-rose-600 mr-1.5 animate-ping"></span> Live Database
-                    </span>
+                    <p class="text-xs text-slate-500 mt-1">Daftar ringkasan kalkulasi data laporan yang masuk ke database.</p>
                 </div>
             </div>
 
@@ -173,35 +168,29 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="border-b border-slate-200 text-slate-400 text-xs font-bold uppercase tracking-wider">
-                            <th class="py-3 px-4">Tanggal / Waktu</th>
-                            <th class="py-3 px-4">Pelapor / Warga</th>
+                            <th class="py-3 px-4">Waktu</th>
                             <th class="py-3 px-4">Desa / Dusun</th>
-                            <th class="py-3 px-4">Jenis Laporan</th>
+                            <th class="py-3 px-4">Kategori Laporan</th>
                         </tr>
                     </thead>
                     <tbody id="tabelRiwayatBody" class="divide-y divide-slate-100 text-sm text-slate-700">
                         <tr>
-                            <td colspan="4" class="text-center py-6 text-slate-400 italic">Memuat data riwayat dari database...</td>
+                            <td colspan="3" class="text-center py-6 text-slate-400 italic">Memuat data kalkulasi dari database...</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </section>
 
-        <!-- TABEL DAFTAR JADWAL AKSI: Default disembunyikan, muncul saat kartu Aksi Lintas Sektor diklik -->
+        <!-- TABEL RENCANA TINDAK LANJUT (Sinkronisasi dari Jadwal Admin) -->
         <section id="jadwalSection" class="hidden bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 space-y-6 transition-all duration-300">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
                 <div>
                     <h3 class="text-xl font-extrabold text-slate-900 flex items-center space-x-2">
                         <i class="fa-solid fa-calendar-days text-sky-600"></i>
-                        <span>Daftar Jadwal Aksi Lintas Sektor</span>
+                        <span>Jadwal Rencana Tindak Lanjut Petugas</span>
                     </h3>
-                    <p class="text-xs text-slate-500 mt-1">Agenda kegiatan pemberantasan sarang nyamuk yang dibuat oleh panel.</p>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-100">
-                        <span class="w-1.5 h-1.5 rounded-full bg-sky-600 mr-1.5 animate-ping"></span> Live Database
-                    </span>
+                    <p class="text-xs text-slate-500 mt-1">Agenda kegiatan tindak lanjut yang telah dibuat oleh petugas/admin.</p>
                 </div>
             </div>
 
@@ -217,7 +206,7 @@
                     </thead>
                     <tbody id="tabelJadwalBody" class="divide-y divide-slate-100 text-sm text-slate-700">
                         <tr>
-                            <td colspan="4" class="text-center py-6 text-slate-400 italic">Memuat daftar jadwal aksi dari database...</td>
+                            <td colspan="4" class="text-center py-6 text-slate-400 italic">Memuat jadwal tindak lanjut dari database...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -303,27 +292,23 @@
             tbody.innerHTML = '';
 
             if (dataList.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-slate-400 italic">Belum ada riwayat laporan yang masuk.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-slate-400 italic">Belum ada kalkulasi data laporan.</td></tr>`;
                 return;
             }
-
-            dataList.sort((a, b) => {
-                const timeA = a.timestamp ? new Date(a.timestamp) : 0;
-                const timeB = b.timestamp ? new Date(b.timestamp) : 0;
-                return timeB - timeA;
-            });
 
             dataList.forEach((item) => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50/80 transition";
 
-                let badgeJenis = `<span class="bg-rose-100 text-rose-700 text-xs font-bold px-2.5 py-1 rounded-full"><i class="fa-solid fa-bed-pulse mr-1"></i> Kasus Pasien Terdampak DBD</span>`;
+                let badgeJenis = item.jenisLaporan === 'pasien' 
+                    ? `<span class="bg-rose-100 text-rose-700 text-xs font-bold px-2.5 py-1 rounded-full"><i class="fa-solid fa-bed-pulse mr-1"></i> Kasus Pasien DBD</span>`
+                    : `<span class="bg-amber-100 text-amber-700 text-xs font-bold px-2.5 py-1 rounded-full"><i class="fa-solid fa-bug mr-1"></i> Temuan Jentik</span>`;
+                
                 const tanggalFormatted = item.timestamp ? new Date(item.timestamp).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : '-';
 
                 tr.innerHTML = `
                     <td class="py-3.5 px-4 text-xs text-slate-500 font-medium">${tanggalFormatted}</td>
-                    <td class="py-3.5 px-4 font-bold text-slate-900">${item.namaPelapor || '-'}</td>
-                    <td class="py-3.5 px-4 text-slate-700">${item.desa || '-'}</td>
+                    <td class="py-3.5 px-4 text-slate-700 font-semibold">${item.desa || '-'}</td>
                     <td class="py-3.5 px-4">${badgeJenis}</td>
                 `;
                 tbody.appendChild(tr);
@@ -335,7 +320,7 @@
             tbody.innerHTML = '';
 
             if (dataList.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-slate-400 italic">Belum ada jadwal aksi yang terdaftar.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-slate-400 italic">Belum ada jadwal rencana tindak lanjut.</td></tr>`;
                 return;
             }
 
@@ -361,22 +346,20 @@
             document.getElementById('mobile-menu').classList.toggle('hidden');
         }
 
-        // Fungsi toggle untuk Riwayat DBD
         window.toggleRiwayatSection = function() {
             const section = document.getElementById('riwayatSection');
             const jadwalSec = document.getElementById('jadwalSection');
-            jadwalSec.classList.add('hidden'); // Tutup bagian jadwal jika terbuka
+            jadwalSec.classList.add('hidden');
             section.classList.toggle('hidden');
             if (!section.classList.contains('hidden')) {
                 section.scrollIntoView({ behavior: 'smooth' });
             }
         }
 
-        // Fungsi toggle untuk Daftar Jadwal Aksi Panel
         window.toggleJadwalSection = function() {
             const section = document.getElementById('jadwalSection');
             const riwayatSec = document.getElementById('riwayatSection');
-            riwayatSec.classList.add('hidden'); // Tutup bagian riwayat jika terbuka
+            riwayatSec.classList.add('hidden');
             section.classList.toggle('hidden');
             if (!section.classList.contains('hidden')) {
                 section.scrollIntoView({ behavior: 'smooth' });

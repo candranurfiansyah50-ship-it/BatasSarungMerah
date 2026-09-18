@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jadwal Aksi & Laporan - BATAS SARUNG MERAH</title>
+    <title>Jadwal Aksi & Tindak Lanjut - BATAS SARUNG MERAH</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
@@ -72,11 +72,11 @@
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full space-y-8">
         
-        <!-- Form Input Jadwal (Terpisah di atas jika dibuka) -->
+        <!-- Form Input Rencana Tindak Lanjut / Jadwal Aksi -->
         <div id="formContainer" class="hidden bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-rose-100">
             <h3 class="text-lg font-extrabold text-slate-900 mb-4 flex items-center space-x-2">
                 <i class="fa-solid fa-calendar-plus text-rose-600"></i>
-                <span>Formulir Pengaturan Jadwal Aksi Baru</span>
+                <span>Formulir Rencana Tindak Lanjut Petugas</span>
             </h3>
             <form id="formJadwalAksi" onsubmit="tambahJadwal(event)" class="space-y-4">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -92,7 +92,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Nama Kegiatan</label>
-                        <input type="text" id="inputKegiatan" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600" placeholder="Contoh: Gerakan Serentak PSN">
+                        <input type="text" id="inputKegiatan" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600" placeholder="Contoh: Fogging / Penyuluhan">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Lokasi / Sasaran</label>
@@ -105,17 +105,53 @@
                 </div>
                 <div class="pt-2 flex justify-end space-x-3">
                     <button type="button" onclick="toggleFormJadwal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl">Batal</button>
-                    <button type="submit" id="btnSimpanJadwal" class="px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-md">Simpan ke Firebase</button>
+                    <button type="submit" id="btnSimpanJadwal" class="px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-md">Simpan Tindak Lanjut</button>
                 </div>
             </form>
         </div>
 
-        <!-- Bagian 1: Jadwal Aksi & Koordinasi Lintas Sektor -->
+        <!-- Bagian 1: Laporan Lengkap Masuk dari Klien (File Tindak Lanjut & Data Lengkap) -->
         <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 space-y-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-100">
                 <div>
-                    <h2 class="text-2xl font-extrabold text-slate-900">Jadwal Aksi & Koordinasi Lintas Sektor</h2>
-                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Agenda gotong royong massal dan penyuluhan kesehatan se-Kecamatan Pasongsongan.</p>
+                    <h3 class="text-xl font-extrabold text-slate-900">Data Laporan Lengkap dari Klien (Tindak Lanjut)</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Menampilkan informasi identitas data lengkap (Nama pelapor, nomor WhatsApp, pasien, dll) khusus untuk petugas.</p>
+                </div>
+                <div class="bg-rose-50 text-rose-700 text-xs font-bold px-3.5 py-2 rounded-xl flex items-center gap-2">
+                    <i class="fa-solid fa-lock"></i>
+                    <span>Akses Petugas & Admin</span>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-600">
+                    <thead class="bg-slate-50 text-slate-700 uppercase text-xs font-extrabold tracking-wider">
+                        <tr>
+                            <th class="px-5 py-4 rounded-l-2xl">Identitas Pelapor & Kontak</th>
+                            <th class="px-5 py-4">Desa / Lokasi</th>
+                            <th class="px-5 py-4">Jenis Laporan</th>
+                            <th class="px-5 py-4">Detail Lengkap Pasien / Jentik</th>
+                            <th class="px-5 py-4 rounded-r-2xl">Koordinat</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelLaporanBody" class="divide-y divide-slate-100 font-medium text-xs sm:text-sm">
+                        <tr>
+                            <td colspan="5" class="px-5 py-12 text-center text-slate-400">
+                                <i class="fa-solid fa-spinner fa-spin text-2xl text-rose-600 mb-2"></i>
+                                <p class="text-xs">Memuat data laporan lengkap dari database...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Bagian 2: Jadwal Aksi & Rencana Tindak Lanjut -->
+        <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-100">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-900">Jadwal Rencana Tindak Lanjut</h2>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Agenda kegiatan penanganan yang dibuat oleh petugas dan otomatis tampil di index.</p>
                 </div>
                 
                 <div class="flex items-center gap-3 flex-wrap">
@@ -125,7 +161,7 @@
                     </button>
                     <button onclick="toggleFormJadwal()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold px-4.5 py-2.5 rounded-xl text-sm shadow-lg shadow-rose-600/20 transition flex items-center space-x-2">
                         <i class="fa-solid fa-plus-circle text-base" id="iconToggleForm"></i>
-                        <span id="textToggleForm">Tambah Jadwal Baru</span>
+                        <span id="textToggleForm">Buat Rencana Tindak Lanjut</span>
                     </button>
                 </div>
             </div>
@@ -146,42 +182,6 @@
                             <td colspan="5" class="px-5 py-12 text-center text-slate-400">
                                 <i class="fa-solid fa-spinner fa-spin text-2xl text-rose-600 mb-2"></i>
                                 <p class="text-xs">Memuat data jadwal...</p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Bagian 2: Display Laporan Terbaru Pasien DBD & Temuan Jentik -->
-        <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 space-y-6">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-100">
-                <div>
-                    <h3 class="text-xl font-extrabold text-slate-900">Menampilkan Laporan Terbaru</h3>
-                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Daftar laporan kasus pasien DBD baru dan wilayah yang terindikasi ada jentik nyamuk.</p>
-                </div>
-                <div class="bg-rose-50 text-rose-700 text-xs font-bold px-3.5 py-2 rounded-xl flex items-center gap-2">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                    <span>Data Real-time dari Masyarakat & Kader</span>
-                </div>
-            </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm text-slate-600">
-                    <thead class="bg-slate-50 text-slate-700 uppercase text-xs font-extrabold tracking-wider">
-                        <tr>
-                            <th class="px-5 py-4 rounded-l-2xl">Pelapor & Kontak</th>
-                            <th class="px-5 py-4">Desa / Lokasi</th>
-                            <th class="px-5 py-4">Jenis Laporan & Status</th>
-                            <th class="px-5 py-4">Detail Pasien / Jentik</th>
-                            <th class="px-5 py-4 rounded-r-2xl">Koordinat / Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabelLaporanBody" class="divide-y divide-slate-100 font-medium text-xs sm:text-sm">
-                        <tr>
-                            <td colspan="5" class="px-5 py-12 text-center text-slate-400">
-                                <i class="fa-solid fa-spinner fa-spin text-2xl text-rose-600 mb-2"></i>
-                                <p class="text-xs">Memuat data laporan pasien & jentik dari database...</p>
                             </td>
                         </tr>
                     </tbody>
@@ -219,7 +219,7 @@
 
         let cacheDataJadwal = [];
 
-        // Fungsi memuat data Jadwal Aksi
+        // Fungsi memuat data Jadwal / Rencana Tindak Lanjut
         async function muatJadwal() {
             const tbody = document.getElementById('tabelJadwalBody');
             try {
@@ -231,7 +231,7 @@
                         <tr>
                             <td colspan="5" class="px-5 py-12 text-center text-slate-400">
                                 <i class="fa-solid fa-calendar-xmark text-3xl text-slate-300 mb-2"></i>
-                                <p class="font-semibold text-sm">Belum ada agenda aksi atau jadwal kegiatan di database.</p>
+                                <p class="font-semibold text-sm">Belum ada agenda rencana tindak lanjut di database.</p>
                             </td>
                         </tr>`;
                     return;
@@ -241,16 +241,16 @@
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
                     cacheDataJadwal.push(data);
-                    const formattedDate = new Date(data.tanggal).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
+                    const formattedDate = data.tanggal ? new Date(data.tanggal).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' }) : '-';
                     
                     const row = document.createElement('tr');
                     row.className = "hover:bg-slate-50/80 transition";
                     row.innerHTML = `
-                        <td class="px-5 py-4 font-bold text-slate-900">${formattedDate}<br><span class="text-xs text-slate-400 font-normal">${data.waktu}</span></td>
-                        <td class="px-5 py-4 font-bold text-slate-900">${data.kegiatan}</td>
-                        <td class="px-5 py-4">${data.lokasi}</td>
-                        <td class="px-5 py-4">${data.pj}</td>
-                        <td class="px-5 py-4"><span class="bg-amber-100 text-amber-800 text-xs px-3 py-1 rounded-full font-bold">Terjadwal</span></td>
+                        <td class="px-5 py-4 font-bold text-slate-900">${formattedDate}<br><span class="text-xs text-slate-400 font-normal">${data.waktu || ''}</span></td>
+                        <td class="px-5 py-4 font-bold text-slate-900">${data.kegiatan || '-'}</td>
+                        <td class="px-5 py-4">${data.lokasi || '-'}</td>
+                        <td class="px-5 py-4">${data.pj || '-'}</td>
+                        <td class="px-5 py-4"><span class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1 rounded-full font-bold">Terjadwal</span></td>
                     `;
                     tbody.appendChild(row);
                 });
@@ -260,7 +260,7 @@
             }
         }
 
-        // Fungsi memuat Display Laporan Terbaru dari koleksi 'laporan_dbd'
+        // Fungsi memuat Laporan Lengkap Klien (Dengan Identitas Lengkap untuk Petugas)
         async function muatLaporanTerbaru() {
             const tbody = document.getElementById('tabelLaporanBody');
             try {
@@ -271,7 +271,7 @@
                         <tr>
                             <td colspan="5" class="px-5 py-12 text-center text-slate-400">
                                 <i class="fa-solid fa-folder-open text-3xl text-slate-300 mb-2"></i>
-                                <p class="font-semibold text-sm">Belum ada laporan pasien DBD atau temuan jentik di database.</p>
+                                <p class="font-semibold text-sm">Belum ada laporan klien masuk di database.</p>
                             </td>
                         </tr>`;
                     return;
@@ -284,18 +284,18 @@
                     let jenisLaporanBadge = "";
                     let detailInfo = "";
 
-                    if (data.namaPasien || data.usiaPasien || data.lokasiPerawatan) {
+                    if (data.jenisLaporan === 'pasien' || data.namaPasien) {
                         jenisLaporanBadge = `<span class="bg-red-100 text-red-800 text-xs px-3 py-1 rounded-full font-bold"><i class="fa-solid fa-bed-pulse mr-1"></i> Kasus DBD</span>`;
                         detailInfo = `
-                            <span class="font-bold text-slate-900">${data.namaPasien || '-'}</span> (${data.usiaPasien || '-'} th)<br>
-                            <span class="text-xs text-slate-500">RS/Faskes: ${data.lokasiPerawatan || '-'}</span><br>
-                            <span class="text-xs text-slate-400 italic">"${data.kronologi || data.keterangan || '-'}"</span>
+                            <span class="font-bold text-slate-900">Pasien: ${data.namaPasien || '-'}</span> (${data.usiaPasien || '-'} th)<br>
+                            <span class="text-xs text-slate-500">Lokasi Rawat: ${data.lokasiRawat || '-'}</span><br>
+                            <span class="text-xs text-slate-600 italic">"${data.catatan || '-'}"</span>
                         `;
                     } else {
-                        jenisLaporanBadge = `<span class="bg-amber-100 text-amber-800 text-xs px-3 py-1 rounded-full font-bold"><i class="fa-solid fa-bug mr-1"></i> ${data.statusJentik || 'Temuan Jentik'}</span>`;
+                        jenisLaporanBadge = `<span class="bg-amber-100 text-amber-800 text-xs px-3 py-1 rounded-full font-bold"><i class="fa-solid fa-bug mr-1"></i> ${data.statusJentik || 'Jentik'}</span>`;
                         detailInfo = `
-                            <span class="text-xs text-slate-600">Catatan Penampungan:</span><br>
-                            <span class="text-xs text-slate-700 italic">"${data.catatan || data.keterangan || '-'}"</span>
+                            <span class="text-xs text-slate-600">Catatan Kondisi Air:</span><br>
+                            <span class="text-xs text-slate-700 italic">"${data.catatan || '-'}"</span>
                         `;
                     }
 
@@ -304,7 +304,7 @@
                     row.innerHTML = `
                         <td class="px-5 py-4 font-bold text-slate-900">
                             ${data.namaPelapor || '-'} <br>
-                            <span class="text-xs text-slate-400 font-normal"><i class="fa-brands fa-whatsapp text-emerald-600"></i> ${data.noWhatsapp || '-'}</span>
+                            <span class="text-xs text-slate-500 font-normal"><i class="fa-brands fa-whatsapp text-emerald-600"></i> ${data.telepon || '-'}</span>
                         </td>
                         <td class="px-5 py-4 font-semibold text-slate-800">
                             <i class="fa-solid fa-location-dot text-rose-600 mr-1"></i> ${data.desa || '-'}
@@ -312,14 +312,14 @@
                         <td class="px-5 py-4">${jenisLaporanBadge}</td>
                         <td class="px-5 py-4 text-sm">${detailInfo}</td>
                         <td class="px-5 py-4 text-xs font-mono text-slate-500">
-                            Lat: ${data.lat || '-'}, Lng: ${data.lng || '-'}<br>
-                            <span class="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded mt-1 inline-block">Terverifikasi</span>
+                            Lat: ${data.latitude || '-'}, <br>Lng: ${data.longitude || '-'}<br>
+                            <span class="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded mt-1 inline-block">Data Lengkap</span>
                         </td>
                     `;
                     tbody.appendChild(row);
                 });
             } catch (error) {
-                console.error("Gagal memuat laporan terbaru: ", error);
+                console.error("Gagal memuat laporan lengkap: ", error);
                 tbody.innerHTML = `<tr><td colspan="5" class="px-5 py-6 text-center text-rose-500 text-xs">Gagal memuat data laporan dari database Firebase.</td></tr>`;
             }
         }
@@ -329,10 +329,9 @@
             muatLaporanTerbaru();
         });
 
-        // Fungsi Unduh Laporan Jadwal
         window.unduhLaporan = function() {
             if (cacheDataJadwal.length === 0) {
-                alert("Tidak ada data laporan jadwal untuk diunduh.");
+                alert("Tidak ada data jadwal untuk diunduh.");
                 return;
             }
 
@@ -346,7 +345,7 @@
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "laporan_jadwal_aksi_dbd.csv");
+            link.setAttribute("download", "laporan_rencana_tindak_lanjut_dbd.csv");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -359,7 +358,7 @@
 
             formContainer.classList.toggle('hidden');
             if (formContainer.classList.contains('hidden')) {
-                textToggle.innerText = "Tambah Jadwal Baru";
+                textToggle.innerText = "Buat Rencana Tindak Lanjut";
                 iconToggle.className = "fa-solid fa-plus-circle text-base";
             } else {
                 textToggle.innerText = "Tutup Formulir";
@@ -390,10 +389,10 @@
                 muatJadwal(); 
             } catch (error) {
                 console.error("Gagal menyimpan jadwal: ", error);
-                alert("Gagal menyimpan jadwal ke Firebase.");
+                alert("Gagal menyimpan rencana tindak lanjut ke Firebase.");
             } finally {
                 btnSimpan.disabled = false;
-                btnSimpan.innerText = "Simpan ke Firebase";
+                btnSimpan.innerText = "Simpan Tindak Lanjut";
             }
         }
 

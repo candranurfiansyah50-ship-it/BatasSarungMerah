@@ -78,7 +78,7 @@
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <div>
                     <h2 class="text-2xl font-extrabold text-slate-900">Peta Sebaran Zona Risiko DBD Kecamatan Pasongsongan</h2>
-                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Titik koordinat temuan laporan warga secara real-time dari database.</p>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Titik koordinat temuan laporan warga secara real-time dari database (Tanpa Identitas Pribadi).</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-3 text-xs font-bold">
                     <span class="flex items-center space-x-1.5 bg-rose-50 text-rose-700 px-3 py-1.5 rounded-full border border-rose-200"><span class="w-2.5 h-2.5 bg-rose-600 rounded-full inline-block"></span> <span>Kasus / Jentik Positif</span></span>
@@ -137,14 +137,12 @@
                 
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    const lat = parseFloat(data.latitude);
-                    const lng = parseFloat(data.longitude);
+                    const lat = parseFloat(data.latitude || data.lat);
+                    const lng = parseFloat(data.longitude || data.lng);
 
                     if (!isNaN(lat) && !isNaN(lng)) {
-                        let warnaPin = data.jenisLaporan === 'pasien' || data.statusJentik === 'Positif Ditemukan Jentik' ? '#E11D48' : '#10b981';
-                        
-                        // Menentukan judul informasi tanpa menampilkan nama pasien/pelapor
-                        let judulInfo = data.jenisLaporan === 'pasien' ? 'Titik Lokasi Kasus Pasien DBD' : 'Titik Lokasi Jentik Positif';
+                        let warnaPin = (data.jenisLaporan === 'pasien' || data.statusJentik === 'Positif Ditemukan Jentik') ? '#E11D48' : '#10b981';
+                        let judulInfo = (data.jenisLaporan === 'pasien') ? 'Titik Lokasi Kasus Pasien DBD' : 'Titik Lokasi Jentik Positif';
 
                         const marker = L.circleMarker([lat, lng], {
                             radius: 10,
@@ -154,12 +152,12 @@
                             fillOpacity: 0.85
                         }).addTo(map);
 
-                        // Popup disesuaikan agar bersih dari identitas pribadi (Nama Pasien & Pelapor dihapus)
+                        // Popup bersih tanpa identitas spesifik/pribadi (Nama pasien/pelapor disembunyikan)
                         marker.bindPopup(`
                             <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 4px;">
                                 <b style="font-size: 13px; color: #0F172A;">${judulInfo}</b><br>
                                 <span style="font-size: 11px; color: #64748B;">Desa: ${data.desa || '-'}</span><br>
-                                <span style="font-size: 11px; color: #64748B;">Catatan: ${data.catatan || '-'}</span>
+                                <span style="font-size: 11px; color: #64748B;">Keterangan: ${data.catatan || data.keterangan || '-'}</span>
                             </div>
                         `);
                     }
