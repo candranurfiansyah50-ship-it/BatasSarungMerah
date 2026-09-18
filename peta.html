@@ -31,7 +31,7 @@
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
 
     <!-- Header / Navigasi -->
-    <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-100">
+    <header class="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center space-x-3">
                 <div class="bg-gradient-to-br from-rose-600 to-red-700 text-white p-3.5 rounded-2xl shadow-lg shadow-red-500/20 flex items-center justify-center">
@@ -90,7 +90,7 @@
             <div class="relative rounded-3xl overflow-hidden border border-slate-200 shadow-inner">
                 <div id="map"></div>
             </div>
-            <p class="text-[11px] text-slate-400 mt-3 text-center"><i class="fa-solid fa-circle-info"></i> Klik pada pin marker di peta untuk melihat detail laporan yang dikirimkan warga.</p>
+            <p class="text-[11px] text-slate-400 mt-3 text-center"><i class="fa-solid fa-circle-info"></i> Klik pada pin marker di peta untuk melihat informasi zona wilayah.</p>
         </section>
     </main>
 
@@ -142,7 +142,9 @@
 
                     if (!isNaN(lat) && !isNaN(lng)) {
                         let warnaPin = data.jenisLaporan === 'pasien' || data.statusJentik === 'Positif Ditemukan Jentik' ? '#E11D48' : '#10b981';
-                        let judulLaporan = data.jenisLaporan === 'pasien' ? `Pasien: ${data.namaPasien}` : `Laporan PSN (${data.desa})`;
+                        
+                        // Menentukan judul informasi tanpa menampilkan nama pasien/pelapor
+                        let judulInfo = data.jenisLaporan === 'pasien' ? 'Titik Lokasi Kasus Pasien DBD' : 'Titik Lokasi Jentik Positif';
 
                         const marker = L.circleMarker([lat, lng], {
                             radius: 10,
@@ -152,11 +154,11 @@
                             fillOpacity: 0.85
                         }).addTo(map);
 
+                        // Popup disesuaikan agar bersih dari identitas pribadi (Nama Pasien & Pelapor dihapus)
                         marker.bindPopup(`
                             <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 4px;">
-                                <b style="font-size: 13px; color: #0F172A;">${judulLaporan}</b><br>
-                                <span style="font-size: 11px; color: #64748B;">Desa: ${data.desa}</span><br>
-                                <span style="font-size: 11px; color: #64748B;">Pelapor: ${data.namaPelapor}</span><br>
+                                <b style="font-size: 13px; color: #0F172A;">${judulInfo}</b><br>
+                                <span style="font-size: 11px; color: #64748B;">Desa: ${data.desa || '-'}</span><br>
                                 <span style="font-size: 11px; color: #64748B;">Catatan: ${data.catatan || '-'}</span>
                             </div>
                         `);
