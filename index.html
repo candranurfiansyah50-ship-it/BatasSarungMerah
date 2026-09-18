@@ -111,27 +111,27 @@
 
         <!-- Stats Grid (Membaca dari Firestore) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Kartu Kasus DBD (Toggle Riwayat) -->
+            <!-- 1. Kartu Kasus DBD (Toggle Riwayat) -->
             <div onclick="toggleRiwayatSection()" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4 cursor-pointer hover:border-rose-300 transition">
                 <div class="p-4 bg-rose-50 text-rose-600 rounded-2xl"><i class="fa-solid fa-bed-pulse text-2xl"></i></div>
                 <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Kasus DBD <span class="text-[10px] text-rose-500 block font-normal"></span></p>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Kasus DBD <span class="text-[10px] text-rose-500 block font-normal">(Klik untuk Riwayat)</span></p>
                     <h3 id="statKasus" class="text-2xl font-extrabold text-slate-900 mt-0.5">0 Orang</h3>
                     <p class="text-xs text-rose-600 font-semibold mt-0.5">Laporan Kasus DBD</p>
                 </div>
             </div>
             
-            <!-- Kartu Desa Waspada (Mengarahkan ke halaman peta.html / Zona Risiko) -->
+            <!-- 2. Kartu Desa Waspada (Mengarahkan ke halaman peta.html / Zona Risiko) -->
             <a href="peta.html" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4 cursor-pointer hover:border-amber-300 transition block">
                 <div class="p-4 bg-amber-50 text-amber-600 rounded-2xl"><i class="fa-solid fa-triangle-exclamation text-2xl"></i></div>
                 <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Desa Waspada <span class="text-[10px] text-amber-500 block font-normal"></span></p>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Desa Waspada <span class="text-[10px] text-amber-500 block font-normal">(Klik untuk Zona Risiko)</span></p>
                     <h3 id="statWaspada" class="text-2xl font-extrabold text-slate-900 mt-0.5">0 Desa</h3>
                     <p class="text-xs text-amber-600 font-semibold mt-0.5">Indikasi Jentik Positif</p>
                 </div>
             </a>
 
-            <!-- Kartu Total Laporan Masuk -->
+            <!-- 3. Kartu Total Laporan Masuk -->
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4">
                 <div class="p-4 bg-emerald-50 text-emerald-600 rounded-2xl"><i class="fa-solid fa-clipboard-check text-2xl"></i></div>
                 <div>
@@ -141,11 +141,11 @@
                 </div>
             </div>
 
-            <!-- Kartu Akses Admin (Toggle Tabel Daftar Jadwal Aksi Panel) -->
+            <!-- 4. Kartu Aksi Lintas Sektor / Akses Admin (Toggle Tabel Daftar Jadwal Aksi Panel) -->
             <div onclick="toggleJadwalSection()" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover flex items-center space-x-4 cursor-pointer hover:border-sky-300 transition">
                 <div class="p-4 bg-sky-50 text-sky-600 rounded-2xl"><i class="fa-solid fa-handshake-angle text-2xl"></i></div>
                 <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Aksi Lintas Sektor <span class="text-[10px] text-sky-500 block font-normal"></span></p>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Aksi Lintas Sektor <span class="text-[10px] text-sky-500 block font-normal">(Klik untuk Daftar Jadwal)</span></p>
                     <h3 id="statJadwal" class="text-2xl font-extrabold text-slate-900 mt-0.5">0 Agenda</h3>
                     <p class="text-xs text-sky-600 font-semibold mt-0.5">Jadwal Terdaftar</p>
                 </div>
@@ -212,7 +212,7 @@
                             <th class="py-3 px-4">Tanggal & Waktu</th>
                             <th class="py-3 px-4">Agenda / Kegiatan</th>
                             <th class="py-3 px-4">Lokasi / Desa</th>
-                            <th class="py-3 px-4">Keterangan</th>
+                            <th class="py-3 px-4">Penanggung Jawab</th>
                         </tr>
                     </thead>
                     <tbody id="tabelJadwalBody" class="divide-y divide-slate-100 text-sm text-slate-700">
@@ -343,11 +343,13 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50/80 transition";
 
+                const tanggalWaktu = `${item.tanggal || '-'} • ${item.waktu || ''}`;
+
                 tr.innerHTML = `
-                    <td class="py-3.5 px-4 text-xs text-slate-500 font-medium">${item.tanggal || '-'} ${item.waktu ? '• ' + item.waktu : ''}</td>
-                    <td class="py-3.5 px-4 font-bold text-slate-900">${item.namaKegiatan || item.agenda || '-'}</td>
-                    <td class="py-3.5 px-4 text-slate-700">${item.lokasi || item.desa || '-'}</td>
-                    <td class="py-3.5 px-4 text-xs text-slate-600">${item.keterangan || '-'}</td>
+                    <td class="py-3.5 px-4 text-xs text-slate-500 font-medium">${tanggalWaktu}</td>
+                    <td class="py-3.5 px-4 font-bold text-slate-900">${item.kegiatan || '-'}</td>
+                    <td class="py-3.5 px-4 text-slate-700">${item.lokasi || '-'}</td>
+                    <td class="py-3.5 px-4 text-xs text-slate-600">${item.pj || '-'}</td>
                 `;
                 tbody.appendChild(tr);
             });
