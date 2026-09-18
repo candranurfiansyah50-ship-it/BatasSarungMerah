@@ -31,7 +31,7 @@
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
 
     <!-- Header / Navigasi -->
-    <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-100">
+    <header class="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center space-x-3">
                 <div class="bg-gradient-to-br from-rose-600 to-red-700 text-white p-3.5 rounded-2xl shadow-lg shadow-red-500/20 flex items-center justify-center">
@@ -144,6 +144,44 @@
                 </div>
             </div>
         </div>
+
+        <!-- FITUR BARU: Tabel Riwayat Laporan & Kasus DBD -->
+        <section class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                <div>
+                    <h3 class="text-xl font-extrabold text-slate-900 flex items-center space-x-2">
+                        <i class="fa-solid fa-history text-rose-600"></i>
+                        <span>Riwayat Laporan & Kasus DBD Terbaru</span>
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-1">Data riwayat lengkap yang dilaporkan oleh warga atau kader kesehatan secara real-time.</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-100">
+                        <span class="w-1.5 h-1.5 rounded-full bg-rose-600 mr-1.5 animate-ping"></span> Live Database
+                    </span>
+                </div>
+            </div>
+
+            <!-- Tabel Data -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                            <th class="py-3 px-4">Tanggal / Waktu</th>
+                            <th class="py-3 px-4">Pelapor / Warga</th>
+                            <th class="py-3 px-4">Desa / Dusun</th>
+                            <th class="py-3 px-4">Jenis Laporan</th>
+                            <th class="py-3 px-4">Keterangan / Status Jentik</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelRiwayatBody" class="divide-y divide-slate-100 text-sm text-slate-700">
+                        <tr>
+                            <td colspan="5" class="text-center py-6 text-slate-400 italic">Memuat data riwayat dari database...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -177,6 +215,7 @@
             let totalLaporan = 0;
             let desaWaspadaSet = new Set();
             let totalJadwal = 0;
+            let listRiwayat = [];
 
             // 1. Ambil data laporan dari koleksi "laporan_dbd" secara aman
             try {
@@ -185,6 +224,10 @@
 
                 laporanSnap.forEach((doc) => {
                     const data = doc.data();
+                    
+                    // Masukkan ke array riwayat untuk ditampilkan di tabel
+                    listRiwayat.push(data);
+
                     if (data.jenisLaporan === 'pasien') {
                         totalKasus++;
                     }
@@ -204,11 +247,63 @@
                 console.warn("Gagal memuat koleksi jadwal_aksi (mungkin belum dibuat):", error);
             }
 
-            // Update UI Dashboard
+            // Update UI Dashboard Statistik
             document.getElementById('statKasus').innerText = `${totalKasus} Orang`;
             document.getElementById('statRumah').innerText = totalLaporan;
             document.getElementById('statWaspada').innerText = `${desaWaspadaSet.size} Desa`;
             document.getElementById('statJadwal').innerText = `${totalJadwal} Agenda`;
+
+            // Render ke Tabel Riwayat
+            renderTabelRiwayat(listRiwayat);
+        }
+
+        function renderTabelRiwayat(dataList) {
+            const tbody = document.getElementById('tabelRiwayatBody');
+            tbody.innerHTML = '';
+
+            if (dataList.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-400 italic">Belum ada riwayat laporan yang masuk.</td></tr>`;
+                return;
+            }
+
+            // Urutkan data berdasarkan waktu terbaru (jika ada properti waktu/timestamp)
+            dataList.sort((a, b) => {
+                const timeA = a.timestamp ? new Date(a.timestamp) : 0;
+                const timeB = b.timestamp ? new Date(b.timestamp) : 0;
+                return timeB - timeA;
+            });
+
+            dataList.forEach((item) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/80 transition";
+
+                // Format badge jenis laporan
+                let badgeJenis = '';
+                if (item.jenisLaporan === 'pasien') {
+                    badgeJenis = `<span class="bg-rose-100 text-rose-700 text-xs font-bold px-2.5 py-1 rounded-full"><i class="fa-solid fa-bed-pulse mr-1"></i> Pasien DBD</span>`;
+                } else {
+                    badgeJenis = `<span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded-full"><i class="fa-solid fa-house-chimney mr-1"></i> Pemeriksaan Jentik</span>`;
+                }
+
+                // Format status jentik atau keterangan tambahan
+                let statusBadge = item.statusJentik || '-';
+                if (item.statusJentik === 'Positif Ditemukan Jentik') {
+                    statusBadge = `<span class="text-amber-600 font-semibold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ${item.statusJentik}</span>`;
+                } else if (item.statusJentik === 'Negatif (Bebas Jentik)') {
+                    statusBadge = `<span class="text-emerald-600 font-semibold"><i class="fa-solid fa-circle-check mr-1"></i> ${item.statusJentik}</span>`;
+                }
+
+                const tanggalFormatted = item.timestamp ? new Date(item.timestamp).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : 'Baru saja';
+
+                tr.innerHTML = `
+                    <td class="py-3.5 px-4 text-xs text-slate-500 font-medium">${tanggalFormatted}</td>
+                    <td class="py-3.5 px-4 font-bold text-slate-900">${item.namaPelapor || item.namaPasien || 'Warga'}</td>
+                    <td class="py-3.5 px-4 text-slate-700">${item.desa || '-'}</td>
+                    <td class="py-3.5 px-4">${badgeJenis}</td>
+                    <td class="py-3.5 px-4 text-xs">${statusBadge}</td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
 
         document.addEventListener("DOMContentLoaded", muatStatistikDashboard);
