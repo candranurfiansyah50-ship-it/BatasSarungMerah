@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jadwal Aksi - BATAS SARUNG MERAH</title>
+    <title>Jadwal Aksi & Laporan - BATAS SARUNG MERAH</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
@@ -110,9 +110,8 @@
             </form>
         </div>
 
-        <!-- Wadah Tunggal: Header Section & Tabel Daftar Jadwal Tergabung -->
+        <!-- Bagian 1: Jadwal Aksi & Koordinasi Lintas Sektor -->
         <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 space-y-6">
-            <!-- Bagian Atas / Header Card -->
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-100">
                 <div>
                     <h2 class="text-2xl font-extrabold text-slate-900">Jadwal Aksi & Koordinasi Lintas Sektor</h2>
@@ -120,13 +119,10 @@
                 </div>
                 
                 <div class="flex items-center gap-3 flex-wrap">
-                    <!-- Tombol Unduh Laporan -->
                     <button onclick="unduhLaporan()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4.5 py-2.5 rounded-xl text-sm transition flex items-center space-x-2">
                         <i class="fa-solid fa-download text-slate-600 text-base"></i>
                         <span>Unduh Laporan</span>
                     </button>
-
-                    <!-- Tombol Tambah Jadwal -->
                     <button onclick="toggleFormJadwal()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold px-4.5 py-2.5 rounded-xl text-sm shadow-lg shadow-rose-600/20 transition flex items-center space-x-2">
                         <i class="fa-solid fa-plus-circle text-base" id="iconToggleForm"></i>
                         <span id="textToggleForm">Tambah Jadwal Baru</span>
@@ -134,7 +130,6 @@
                 </div>
             </div>
 
-            <!-- Bagian Bawah / Tabel Daftar Jadwal -->
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm text-slate-600">
                     <thead class="bg-slate-50 text-slate-700 uppercase text-xs font-extrabold tracking-wider">
@@ -150,13 +145,50 @@
                         <tr>
                             <td colspan="5" class="px-5 py-12 text-center text-slate-400">
                                 <i class="fa-solid fa-spinner fa-spin text-2xl text-rose-600 mb-2"></i>
-                                <p class="text-xs">Memuat data jadwal dari database Firebase...</p>
+                                <p class="text-xs">Memuat data jadwal...</p>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
+
+        <!-- Bagian 2: Display Laporan Terbaru Pasien DBD & Temuan Jentik (Disesuaikan dengan Form Input) -->
+        <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-100">
+                <div>
+                    <h3 class="text-xl font-extrabold text-slate-900">Menampilkan Laporan Terbaru</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Daftar laporan kasus pasien DBD baru dan wilayah yang terindikasi ada jentik nyamuk.</p>
+                </div>
+                <div class="bg-rose-50 text-rose-700 text-xs font-bold px-3.5 py-2 rounded-xl flex items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span>Data Real-time dari Masyarakat & Kader</span>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-600">
+                    <thead class="bg-slate-50 text-slate-700 uppercase text-xs font-extrabold tracking-wider">
+                        <tr>
+                            <th class="px-5 py-4 rounded-l-2xl">Pelapor & Kontak</th>
+                            <th class="px-5 py-4">Desa / Lokasi</th>
+                            <th class="px-5 py-4">Jenis Laporan & Status</th>
+                            <th class="px-5 py-4">Detail Pasien / Jentik</th>
+                            <th class="px-5 py-4 rounded-r-2xl">Koordinat / Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelLaporanBody" class="divide-y divide-slate-100 font-medium text-xs sm:text-sm">
+                        <tr>
+                            <td colspan="5" class="px-5 py-12 text-center text-slate-400">
+                                <i class="fa-solid fa-spinner fa-spin text-2xl text-rose-600 mb-2"></i>
+                                <p class="text-xs">Memuat data laporan pasien & jentik dari database...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </main>
 
     <!-- Footer -->
@@ -185,14 +217,14 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Variabel penampung data untuk fitur unduh laporan
         let cacheDataJadwal = [];
 
+        // Fungsi memuat data Jadwal Aksi
         async function muatJadwal() {
             const tbody = document.getElementById('tabelJadwalBody');
             try {
                 const querySnapshot = await getDocs(collection(db, "jadwal_aksi"));
-                cacheDataJadwal = []; // Reset cache
+                cacheDataJadwal = [];
 
                 if (querySnapshot.empty) {
                     tbody.innerHTML = `
@@ -208,8 +240,7 @@
                 tbody.innerHTML = "";
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    cacheDataJadwal.push(data); // Simpan ke cache lokal
-
+                    cacheDataJadwal.push(data);
                     const formattedDate = new Date(data.tanggal).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
                     
                     const row = document.createElement('tr');
@@ -229,9 +260,80 @@
             }
         }
 
-        document.addEventListener("DOMContentLoaded", muatJadwal);
+        // Fungsi memuat Display Laporan Terbaru (Pasien DBD & Temuan Jentik) sesuai Form Input
+        async function muatLaporanTerbaru() {
+            const tbody = document.getElementById('tabelLaporanBody');
+            try {
+                // Menarik data dari koleksi laporan (sesuaikan nama koleksi jika berbeda, misal: "laporan_psn")
+                const querySnapshot = await getDocs(collection(db, "laporan_psn"));
 
-        // Fungsi untuk mengunduh laporan (Format CSV)
+                if (querySnapshot.empty) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="px-5 py-12 text-center text-slate-400">
+                                <i class="fa-solid fa-folder-open text-3xl text-slate-300 mb-2"></i>
+                                <p class="font-semibold text-sm">Belum ada laporan pasien DBD atau temuan jentik yang masuk.</p>
+                            </td>
+                        </tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = "";
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    
+                    // Identifikasi jenis laporan (apakah laporan pasien DBD atau jentik berdasarkan field form)
+                    let jenisLaporanBadge = "";
+                    let detailInfo = "";
+
+                    if (data.namaPasien || data.usiaPasien || data.lokasiPerawatan) {
+                        // Kategori Laporan Pasien Terjangkit DBD
+                        jenisLaporanBadge = `<span class="bg-red-100 text-red-800 text-xs px-3 py-1 rounded-full font-bold"><i class="fa-solid fa-bed-pulse mr-1"></i> Kasus DBD</span>`;
+                        detailInfo = `
+                            <span class="font-bold text-slate-900">${data.namaPasien || '-'}</span> (${data.usiaPasien || '-'} th)<br>
+                            <span class="text-xs text-slate-500">RS/Faskes: ${data.lokasiPerawatan || '-'}</span><br>
+                            <span class="text-xs text-slate-400 italic">"${data.kronologi || data.keterangan || '-'}"</span>
+                        `;
+                    } else {
+                        // Kategori Laporan Sarang / Jentik Nyamuk
+                        jenisLaporanBadge = `<span class="bg-amber-100 text-amber-800 text-xs px-3 py-1 rounded-full font-bold"><i class="fa-solid fa-bug mr-1"></i> ${data.statusJentik || 'Temuan Jentik'}</span>`;
+                        detailInfo = `
+                            <span class="text-xs text-slate-600">Catatan Penampungan:</span><br>
+                            <span class="text-xs text-slate-700 italic">"${data.catatan || data.keterangan || '-'}"</span>
+                        `;
+                    }
+
+                    const row = document.createElement('tr');
+                    row.className = "hover:bg-slate-50/80 transition";
+                    row.innerHTML = `
+                        <td class="px-5 py-4 font-bold text-slate-900">
+                            ${data.namaPelapor || '-'} <br>
+                            <span class="text-xs text-slate-400 font-normal"><i class="fa-brands fa-whatsapp text-emerald-600"></i> ${data.noWhatsapp || '-'}</span>
+                        </td>
+                        <td class="px-5 py-4 font-semibold text-slate-800">
+                            <i class="fa-solid fa-location-dot text-rose-600 mr-1"></i> ${data.desa || '-'}
+                        </td>
+                        <td class="px-5 py-4">${jenisLaporanBadge}</td>
+                        <td class="px-5 py-4 text-sm">${detailInfo}</td>
+                        <td class="px-5 py-4 text-xs font-mono text-slate-500">
+                            Lat: ${data.lat || '-'}, Lng: ${data.lng || '-'}<br>
+                            <span class="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded mt-1 inline-block">Terverifikasi</span>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                console.error("Gagal memuat laporan terbaru: ", error);
+                tbody.innerHTML = `<tr><td colspan="5" class="px-5 py-6 text-center text-rose-500 text-xs">Gagal memuat data laporan dari database Firebase.</td></tr>`;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            muatJadwal();
+            muatLaporanTerbaru();
+        });
+
+        // Fungsi Unduh Laporan Jadwal
         window.unduhLaporan = function() {
             if (cacheDataJadwal.length === 0) {
                 alert("Tidak ada data laporan jadwal untuk diunduh.");
