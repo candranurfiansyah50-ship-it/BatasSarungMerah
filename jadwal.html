@@ -72,29 +72,7 @@
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full space-y-8">
         
-        <!-- Header Section dengan Tombol Unduh Laporan & Tambah Jadwal -->
-        <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div>
-                <h2 class="text-2xl font-extrabold text-slate-900">Jadwal Aksi & Koordinasi Lintas Sektor</h2>
-                <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Agenda gotong royong massal dan penyuluhan kesehatan se-Kecamatan Pasongsongan.</p>
-            </div>
-            
-            <div class="flex items-center gap-3 flex-wrap">
-                <!-- Tombol Unduh Laporan Baru -->
-                <button onclick="unduhLaporan()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4.5 py-2.5 rounded-xl text-sm transition flex items-center space-x-2">
-                    <i class="fa-solid fa-download text-slate-600 text-base"></i>
-                    <span>Unduh Laporan</span>
-                </button>
-
-                <!-- Tombol Tambah Jadwal -->
-                <button onclick="toggleFormJadwal()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold px-4.5 py-2.5 rounded-xl text-sm shadow-lg shadow-rose-600/20 transition flex items-center space-x-2">
-                    <i class="fa-solid fa-plus-circle text-base" id="iconToggleForm"></i>
-                    <span id="textToggleForm">Tambah Jadwal Baru</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Form Input Jadwal -->
+        <!-- Form Input Jadwal (Terpisah di atas jika dibuka) -->
         <div id="formContainer" class="hidden bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-rose-100">
             <h3 class="text-lg font-extrabold text-slate-900 mb-4 flex items-center space-x-2">
                 <i class="fa-solid fa-calendar-plus text-rose-600"></i>
@@ -132,11 +110,31 @@
             </form>
         </div>
 
-        <!-- Tabel Daftar Jadwal (Real-time dari Firestore) -->
-        <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 space-y-4">
-            <div class="flex justify-between items-center">
-                <h3 class="text-base font-extrabold text-slate-900">Menampilkan Laporan Terbaru</h3>
+        <!-- Wadah Tunggal: Header Section & Tabel Daftar Jadwal Tergabung -->
+        <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 space-y-6">
+            <!-- Bagian Atas / Header Card -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-100">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-900">Jadwal Aksi & Koordinasi Lintas Sektor</h2>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Agenda gotong royong massal dan penyuluhan kesehatan se-Kecamatan Pasongsongan.</p>
+                </div>
+                
+                <div class="flex items-center gap-3 flex-wrap">
+                    <!-- Tombol Unduh Laporan -->
+                    <button onclick="unduhLaporan()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4.5 py-2.5 rounded-xl text-sm transition flex items-center space-x-2">
+                        <i class="fa-solid fa-download text-slate-600 text-base"></i>
+                        <span>Unduh Laporan</span>
+                    </button>
+
+                    <!-- Tombol Tambah Jadwal -->
+                    <button onclick="toggleFormJadwal()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold px-4.5 py-2.5 rounded-xl text-sm shadow-lg shadow-rose-600/20 transition flex items-center space-x-2">
+                        <i class="fa-solid fa-plus-circle text-base" id="iconToggleForm"></i>
+                        <span id="textToggleForm">Tambah Jadwal Baru</span>
+                    </button>
+                </div>
             </div>
+
+            <!-- Bagian Bawah / Tabel Daftar Jadwal -->
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm text-slate-600">
                     <thead class="bg-slate-50 text-slate-700 uppercase text-xs font-extrabold tracking-wider">
@@ -242,12 +240,11 @@
 
             let csvContent = "data:text/csv;charset=utf-8,Tanggal,Waktu,Kegiatan,Lokasi/Sasaran,Penanggung Jawab\r\n";
             
-            cacheDataJadwalforEachItem = cacheDataJadwal.forEach(item => {
+            cacheDataJadwal.forEach(item => {
                 let row = `"${item.tanggal}","${item.waktu}","${item.kegiatan}","${item.lokasi}","${item.pj}"`;
                 csvContent += row + "\r\n";
             });
 
-            // Membuat elemen tautan unduhan virtual
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
