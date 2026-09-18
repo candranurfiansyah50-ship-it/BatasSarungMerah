@@ -153,7 +153,7 @@
             </div>
         </div>
 
-        <!-- Bagian 2: Display Laporan Terbaru Pasien DBD & Temuan Jentik (Disesuaikan dengan Form Input) -->
+        <!-- Bagian 2: Display Laporan Terbaru Pasien DBD & Temuan Jentik -->
         <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 space-y-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-100">
                 <div>
@@ -260,19 +260,18 @@
             }
         }
 
-        // Fungsi memuat Display Laporan Terbaru (Pasien DBD & Temuan Jentik) sesuai Form Input
+        // Fungsi memuat Display Laporan Terbaru dari koleksi 'laporan_dbd'
         async function muatLaporanTerbaru() {
             const tbody = document.getElementById('tabelLaporanBody');
             try {
-                // Menarik data dari koleksi laporan (sesuaikan nama koleksi jika berbeda, misal: "laporan_psn")
-                const querySnapshot = await getDocs(collection(db, "laporan_psn"));
+                const querySnapshot = await getDocs(collection(db, "laporan_dbd"));
 
                 if (querySnapshot.empty) {
                     tbody.innerHTML = `
                         <tr>
                             <td colspan="5" class="px-5 py-12 text-center text-slate-400">
                                 <i class="fa-solid fa-folder-open text-3xl text-slate-300 mb-2"></i>
-                                <p class="font-semibold text-sm">Belum ada laporan pasien DBD atau temuan jentik yang masuk.</p>
+                                <p class="font-semibold text-sm">Belum ada laporan pasien DBD atau temuan jentik di database.</p>
                             </td>
                         </tr>`;
                     return;
@@ -282,12 +281,10 @@
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
                     
-                    // Identifikasi jenis laporan (apakah laporan pasien DBD atau jentik berdasarkan field form)
                     let jenisLaporanBadge = "";
                     let detailInfo = "";
 
                     if (data.namaPasien || data.usiaPasien || data.lokasiPerawatan) {
-                        // Kategori Laporan Pasien Terjangkit DBD
                         jenisLaporanBadge = `<span class="bg-red-100 text-red-800 text-xs px-3 py-1 rounded-full font-bold"><i class="fa-solid fa-bed-pulse mr-1"></i> Kasus DBD</span>`;
                         detailInfo = `
                             <span class="font-bold text-slate-900">${data.namaPasien || '-'}</span> (${data.usiaPasien || '-'} th)<br>
@@ -295,7 +292,6 @@
                             <span class="text-xs text-slate-400 italic">"${data.kronologi || data.keterangan || '-'}"</span>
                         `;
                     } else {
-                        // Kategori Laporan Sarang / Jentik Nyamuk
                         jenisLaporanBadge = `<span class="bg-amber-100 text-amber-800 text-xs px-3 py-1 rounded-full font-bold"><i class="fa-solid fa-bug mr-1"></i> ${data.statusJentik || 'Temuan Jentik'}</span>`;
                         detailInfo = `
                             <span class="text-xs text-slate-600">Catatan Penampungan:</span><br>
