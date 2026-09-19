@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zona Risiko DBD - BATAS SARUNG MERAH</title>
+    <title>Zona Risiko & Peta Desa DBD - BATAS SARUNG MERAH</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
@@ -25,7 +25,7 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; color: #1E293B; }
         .nav-active { color: #E11D48; border-bottom: 3px solid #E11D48; font-weight: 700; }
-        #map { width: 100%; height: 480px; border-radius: 1.5rem; z-index: 10; }
+        .map-container { width: 100%; height: 480px; border-radius: 1.5rem; z-index: 10; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
@@ -72,13 +72,14 @@
         </div>
     </header>
 
-    <!-- Main Content: Peta Zona Risiko -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full space-y-8">
-        <!-- Peta Interaktif Utama -->
+    <!-- Main Content: Peta Zona Risiko & Peta Wilayah Desa -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full space-y-12">
+        
+        <!-- PETA 1: Sebaran Titik Temuan & Radius -->
         <section class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <div>
-                    <h2 class="text-2xl font-extrabold text-slate-900">Peta Sebaran Zona Risiko DBD Kecamatan Pasongsongan</h2>
+                    <h2 class="text-2xl font-extrabold text-slate-900">1. Peta Sebaran Titik Temuan Kasus DBD</h2>
                     <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Radius wilayah 100 meter per titik laporan kasus.</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-3 text-xs font-bold">
@@ -87,12 +88,33 @@
                 </div>
             </div>
 
-            <!-- Leaflet Map Container -->
+            <!-- Leaflet Map 1 Container -->
             <div class="relative rounded-3xl overflow-hidden border border-slate-200 shadow-inner">
-                <div id="map"></div>
+                <div id="map" class="map-container"></div>
             </div>
             <p class="text-[11px] text-slate-400 mt-3 text-center"><i class="fa-solid fa-circle-info"></i> Klik pada pin marker di peta untuk melihat detail informasi zona wilayah.</p>
         </section>
+
+        <!-- PETA 2: Peta Wilayah Zona Desa (>= 5 Kasus = Zona Merah) -->
+        <section class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-900">2. Peta Zona Risiko Per Desa (Kec. Pasongsongan)</h2>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Desa otomatis menjadi <b>Zona Merah</b> jika terdapat &ge; 5 kasus.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-3 text-xs font-bold">
+                    <span class="flex items-center space-x-1.5 bg-red-50 text-red-700 px-3 py-1.5 rounded-full border border-red-200"><span class="w-2.5 h-2.5 bg-red-600 rounded-full inline-block"></span> <span>Zona Merah (&ge; 5 Kasus)</span></span>
+                    <span class="flex items-center space-x-1.5 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full border border-emerald-200"><span class="w-2.5 h-2.5 bg-emerald-500 rounded-full inline-block"></span> <span>Zona Aman (&lt; 5 Kasus)</span></span>
+                </div>
+            </div>
+
+            <!-- Leaflet Map 2 Container -->
+            <div class="relative rounded-3xl overflow-hidden border border-slate-200 shadow-inner">
+                <div id="map-desa" class="map-container"></div>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-3 text-center"><i class="fa-solid fa-circle-info"></i> Klik pada wilayah poligon desa untuk melihat jumlah kasus aktual dan status zonanya.</p>
+        </section>
+
     </main>
 
     <!-- Footer -->
@@ -105,7 +127,7 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <!-- Firebase Reader Script untuk Peta dengan Radius & Deteksi Bersentuhan -->
+    <!-- Script Integrasi Kedua Peta (Firebase + GeoJSON Desa) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -127,29 +149,43 @@
         document.addEventListener("DOMContentLoaded", async function() {
             const pasongsonganCenter = [-6.930, 113.660];
             
-            // 1. Peta Utama Zona Risiko
-            const map = L.map('map').setView(pasongsonganCenter, 12);
+            // --- INisialisasi PETA 1: Titik Temuan Kasus ---
+            const map1 = L.map('map').setView(pasongsonganCenter, 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; OpenStreetMap contributors'
-            }).addTo(map);
+            }).addTo(map1);
+
+            // --- Inisialisasi PETA 2: Peta Zona Wilayah Desa ---
+            const mapDesa = L.map('map-desa').setView(pasongsonganCenter, 11);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(mapDesa);
 
             try {
+                // Ambil data laporan dari Firebase
                 const querySnapshot = await getDocs(collection(db, "laporan_dbd"));
                 let points = [];
+                let kasusPerDesa = {}; // Menyimpan akumulasi hitungan kasus per nama desa
 
-                // Kumpulkan semua titik data valid
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
                     const lat = parseFloat(data.latitude || data.lat);
                     const lng = parseFloat(data.longitude || data.lng);
+                    const namaDesa = (data.desa || "").trim();
+
+                    // Hitung jumlah kasus per desa berdasarkan input laporan
+                    if (namaDesa) {
+                        kasusPerDesa[namaDesa] = (kasusPerDesa[namaDesa] || 0) + 1;
+                    }
 
                     if (!isNaN(lat) && !isNaN(lng)) {
                         points.push({ lat, lng, data });
                     }
                 });
 
-                // Cek apakah jarak antar titik radius 100m bersentuhan
+                // Cek jarak antar titik (Overlap/Bersentuhan radius 100m) untuk Peta 1
                 points.forEach((p1, i) => {
                     let isOverlap = false;
                     points.forEach((p2, j) => {
@@ -166,7 +202,7 @@
                     p1.isOverlap = isOverlap;
                 });
 
-                // Render lingkaran radius dan marker ke peta
+                // Render Peta 1 (Radius & Marker Titik)
                 points.forEach((p) => {
                     const color = p.isOverlap ? '#E11D48' : '#D97706'; 
                     const zoneName = p.isOverlap ? 'Zona Waspada (Radius Bersentuhan)' : 'Zona Hati-hati (Radius Aman)';
@@ -177,7 +213,7 @@
                         weight: 2,
                         fillColor: color,
                         fillOpacity: 0.25
-                    }).addTo(map);
+                    }).addTo(map1);
 
                     const marker = L.circleMarker([p.lat, p.lng], {
                         radius: 7,
@@ -185,7 +221,7 @@
                         weight: 2,
                         fillColor: color,
                         fillOpacity: 1
-                    }).addTo(map);
+                    }).addTo(map1);
 
                     marker.bindPopup(`
                         <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 4px;">
@@ -202,8 +238,52 @@
                     `);
                 });
 
+                // --- Muat dan Render Peta 2 (Polygon GeoJSON Desa + Aturan Zona Merah jika >= 5 Kasus) ---
+                // Pastikan file 'pasongsongan.geojson' berada dalam satu folder dengan file web Anda
+                try {
+                    const response = await fetch('pasongsongan.geojson');
+                    const geojsonData = await response.json();
+
+                    L.geoJson(geojsonData, {
+                        style: function(feature) {
+                            // Sesuaikan 'nama_desa' dengan properti yang ada di dalam file GeoJSON Anda
+                            const namaDesa = (feature.properties.nama_desa || feature.properties.name || "").trim();
+                            const totalKasus = kasusPerDesa[namaDesa] || 0;
+                            
+                            // Logika Zona Merah: Jika kasus >= 5 maka merah, jika tidak hijau aman
+                            const isZonaMerah = totalKasus >= 5;
+
+                            return {
+                                fillColor: isZonaMerah ? '#DC2626' : '#10B981', // Merah / Hijau
+                                weight: 2,
+                                opacity: 1,
+                                color: 'white',
+                                dashArray: '3',
+                                fillOpacity: 0.55
+                            };
+                        },
+                        onEachFeature: function(feature, layer) {
+                            const namaDesa = (feature.properties.nama_desa || feature.properties.name || "").trim();
+                            const totalKasus = kasusPerDesa[namaDesa] || 0;
+                            const isZonaMerah = totalKasus >= 5;
+                            const statusTeks = isZonaMerah ? '<span style="color: #DC2626; font-weight: bold;">ZONA MERAH</span>' : '<span style="color: #10B981; font-weight: bold;">Zona Aman</span>';
+
+                            layer.bindPopup(`
+                                <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 4px;">
+                                    <b style="font-size: 13px; color: #0F172A;">Desa: ${namaDesa}</b><br>
+                                    <span style="font-size: 11px; color: #64748B;">Total Kasus: <b>${totalKasus} Kasus</b></span><br>
+                                    <span style="font-size: 11px;">Status: ${statusTeks}</span>
+                                </div>
+                            `);
+                        }
+                    }).addTo(mapDesa);
+
+                } catch (geojsonError) {
+                    console.warn("File 'pasongsongan.geojson' tidak ditemukan atau gagal dimuat. Pastikan file GeoJSON sudah diunggah ke direktori server Anda.", geojsonError);
+                }
+
             } catch (error) {
-                console.error("Gagal memuat titik peta dari Firebase:", error);
+                console.error("Gagal memuat data dari Firebase:", error);
             }
         });
 
