@@ -3,236 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peta Zona Risiko Desa DBD - BATAS SARUNG MERAH</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Peta Zona Risiko DBD - Pasongsongan</title>
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: { primary: '#E11D48', primaryDark: '#BE123C', secondary: '#0F172A', accent: '#0284C7', success: '#059669', warning: '#D97706' },
-                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
-                }
-            }
-        }
-    </script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; color: #1E293B; }
-        .nav-active { color: #E11D48; border-bottom: 3px solid #E11D48; font-weight: 700; }
-        .map-container { width: 100%; height: 550px; border-radius: 1.5rem; z-index: 10; }
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+<body>
 
-    <!-- Header / Navigasi -->
-    <header class="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <a href="index.html" class="flex items-center space-x-3">
-                <div class="bg-gradient-to-br from-rose-600 to-red-700 text-white p-3.5 rounded-2xl shadow-lg shadow-red-500/20 flex items-center justify-center">
-                    <i class="fa-solid fa-shield-virus text-xl"></i>
-                </div>
-                <div>
-                    <div class="flex items-center space-x-2">
-                        <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-slate-900">BATAS SARUNG MERAH</h1>
-                        <span class="bg-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Pasongsongan</span>
-                    </div>
-                    <p class="text-xs text-slate-500 font-medium">Lintas Sektor Brantas Sarang Nyamuk DBD</p>
-                </div>
-            </a>
-
-            <!-- Desktop Nav Menu -->
-            <nav class="hidden lg:flex items-center space-x-8 text-sm font-semibold">
-                <a href="index.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Dashboard</a>
-                <a href="lapor.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Lapor Kasus</a>
-                <a href="peta.html" class="nav-active pb-1 transition">Zona Risiko</a>
-                <a href="jadwal.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Akses Admin</a>
-                <a href="edukasi.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Edukasi 3M+</a>
-            </nav>
-
-            <div class="flex items-center space-x-3">
-                <button onclick="toggleMobileMenu()" class="lg:hidden text-slate-700 p-2 rounded-lg hover:bg-slate-100 transition">
-                    <i class="fa-solid fa-bars text-xl"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-2">
-            <a href="index.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Dashboard</a>
-            <a href="lapor.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Lapor Kasus</a>
-            <a href="peta.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm bg-rose-50 text-rose-600">Zona Risiko</a>
-            <a href="jadwal.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Jadwal Aksi</a>
-            <a href="edukasi.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Edukasi 3M+</a>
-        </div>
-    </header>
-
-    <!-- Main Content: Peta Zona Risiko Per Desa -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full space-y-6">
-        
-        <section class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                <div>
-                    <h2 class="text-2xl font-extrabold text-slate-900">Peta Zona Risiko DBD Per Desa & Titik Kasus</h2>
-                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Kecamatan Pasongsongan — Wilayah otomatis menjadi <b>Zona Merah</b> jika terdapat &ge; 5 kasus.</p>
-                </div>
-                <div class="flex flex-wrap items-center gap-3 text-xs font-bold">
-                    <span class="flex items-center space-x-1.5 bg-red-50 text-red-700 px-3 py-1.5 rounded-full border border-red-200"><span class="w-2.5 h-2.5 bg-red-600 rounded-full inline-block"></span> <span>Zona Merah (&ge; 5 Kasus)</span></span>
-                    <span class="flex items-center space-x-1.5 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full border border-emerald-200"><span class="w-2.5 h-2.5 bg-emerald-500 rounded-full inline-block"></span> <span>Zona Aman (&lt; 5 Kasus)</span></span>
-                </div>
-            </div>
-
-            <!-- Leaflet Map Container -->
-            <div class="relative rounded-3xl overflow-hidden border border-slate-200 shadow-inner">
-                <div id="map-desa" class="map-container"></div>
-            </div>
-            <p class="text-[11px] text-slate-400 mt-3 text-center"><i class="fa-solid fa-circle-info"></i> Klik pada poligon desa untuk melihat total kasus, atau klik pada pin titik koordinat merah untuk melihat detail pasien dan masuk ke panel admin.</p>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 mt-16 py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-500">
-            <p>&copy; 2026 BATAS SARUNG MERAH - Kecamatan Pasongsongan, Kabupaten Sumenep.</p>
-        </div>
-    </footer>
+    <div id="map"></div>
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-    <!-- Script Integrasi Peta Desa + Titik Koordinat Kasus dari Firebase (Fixed) -->
+    <!-- Firebase SDK (Modular v9/v10) -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // Konfigurasi Firebase Anda (Sesuaikan dengan project Anda)
         const firebaseConfig = {
-            apiKey: "AIzaSyBaljRnifVqGBvM00thWpkorY3VM-owF8g",
-            authDomain: "batas-sarung-merah.firebaseapp.com",
-            databaseURL: "https://batas-sarung-merah-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "batas-sarung-merah",
-            storageBucket: "batas-sarung-merah.firebasestorage.app",
-            messagingSenderId: "243467238033",
-            appId: "1:243467238033:web:ef6849be3de989c7771d30",
-            measurementId: "G-SNVQ1SB461"
+            apiKey: "API_KEY_ANDA",
+            authDomain: "PROJECT_ID.firebaseapp.com",
+            projectId: "PROJECT_ID",
+            storageBucket: "PROJECT_ID.appspot.com",
+            messagingSenderId: "MESSAGING_SENDER_ID",
+            appId: "APP_ID"
         };
 
+        // Inisialisasi Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        document.addEventListener("DOMContentLoaded", async function() {
-            const pasongsonganCenter = [-6.930, 113.660];
-            
-            // Inisialisasi Peta Zona Wilayah Desa
-            const mapDesa = L.map('map-desa').setView(pasongsonganCenter, 11);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '&copy; OpenStreetMap contributors'
-            }).addTo(mapDesa);
+        // Inisialisasi Peta Leaflet (Berpusat di Pasongsongan, Sumenep)
+        const map = L.map('map').setView([-6.88, 113.65], 12);
 
+        // Tambahkan Tile Layer (Basemap OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Fungsi utama untuk memuat data dan merender peta
+        async function loadMapData() {
             try {
-                let kasusPerDesa = {}; 
-                let points = [];
-
-                // 1. TUNGGU hingga data dari Firebase selesai diunduh sepenuhnya
+                // 1. Ambil semua dokumen dari koleksi 'laporan_dbd'
                 const querySnapshot = await getDocs(collection(db, "laporan_dbd"));
+                const caseCounts = {};
 
+                // Hitung jumlah kasus per desa berdasarkan dokumen pasien
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    let namaDesaRaw = (data.desa || "").trim();
-                    let namaDesa = namaDesaRaw.replace(/^desa\s+/i, "").toLowerCase();
-
+                    let namaDesa = data.desa ? data.desa.trim() : "";
+                    
+                    // Normalisasi nama desa jika diperlukan (misal: pastikan format sama dengan GeoJSON)
                     if (namaDesa) {
-                        kasusPerDesa[namaDesa] = (kasusPerDesa[namaDesa] || 0) + 1;
-                    }
-
-                    const lat = parseFloat(data.latitude || data.lat);
-                    const lng = parseFloat(data.longitude || data.lng);
-
-                    if (!isNaN(lat) && !isNaN(lng)) {
-                        points.push({ lat, lng, data });
+                        caseCounts[namaDesa] = (caseCounts[namaDesa] || 0) + 1;
                     }
                 });
 
-                // 2. SETELAH data Firebase siap, BARU muat file GeoJSON dan render peta poligon
+                console.log("Rekap Kasus per Desa:", caseCounts);
+
+                // 2. Ambil file GeoJSON wilayah (pastikan file pasongsongan.geojson berada di folder yang sama)
                 const response = await fetch('pasongsongan.geojson');
                 const geojsonData = await response.json();
 
+                // 3. Tambahkan Layer GeoJSON ke Peta dengan Styling Dinamis
                 L.geoJson(geojsonData, {
-                    style: function(feature) {
-                        const propDesa = (feature.properties.nama_desa || feature.properties.name || "").trim();
-                        const namaDesaGeo = propDesa.replace(/^desa\s+/i, "").toLowerCase();
+                    style: function (feature) {
+                        // Sesuaikan 'DESA' atau 'nama' dengan properti nama desa di file GeoJSON Anda
+                        const namaDesaGeo = feature.properties.DESA || feature.properties.nama || ""; 
                         
-                        // Perhitungan akurat berdasarkan data Firebase yang sudah terunduh
-                        const totalKasus = kasusPerDesa[namaDesaGeo] || 0;
-                        const isZonaMerah = totalKasus >= 5;
+                        // Ambil jumlah kasus untuk desa tersebut (default 0 jika tidak ada)
+                        const totalKasus = caseCounts[namaDesaGeo] || 0;
+
+                        // Tentukan warna berdasarkan ketentuan zona (< 5 Aman/Hijau, >= 5 Merah)[cite: 20]
+                        const warna = totalKasus >= 5 ? "#ff0000" : "#28a745"; // Merah atau Hijau
 
                         return {
-                            fillColor: isZonaMerah ? '#DC2626' : '#10B981', // Merah jika >= 5, Hijau jika < 5
+                            fillColor: warna,
                             weight: 2,
                             opacity: 1,
                             color: 'white',
                             dashArray: '3',
-                            fillOpacity: 0.55
+                            fillOpacity: 0.6
                         };
                     },
-                    onEachFeature: function(feature, layer) {
-                        const propDesa = (feature.properties.nama_desa || feature.properties.name || "").trim();
-                        const namaDesaGeo = propDesa.replace(/^desa\s+/i, "").toLowerCase();
-                        
-                        const totalKasus = kasusPerDesa[namaDesaGeo] || 0;
-                        const isZonaMerah = totalKasus >= 5;
-                        const statusTeks = isZonaMerah ? '<span style="color: #DC2626; font-weight: bold;">ZONA MERAH</span>' : '<span style="color: #10B981; font-weight: bold;">Zona Aman</span>';
+                    onEachFeature: function (feature, layer) {
+                        const namaDesaGeo = feature.properties.DESA || feature.properties.nama || "Wilayah";
+                        const totalKasus = caseCounts[namaDesaGeo] || 0;
+                        const statusZona = totalKasus >= 5 ? "Zona Merah" : "Zona Aman";
 
+                        // Tambahkan Popup informasi saat desa diklik
                         layer.bindPopup(`
-                            <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 6px;">
-                                <b style="font-size: 14px; color: #0F172A;">Desa: ${propDesa}</b><br>
-                                <span style="font-size: 12px; color: #64748B;">Total Kasus: <b>${totalKasus} Kasus</b></span><br>
-                                <span style="font-size: 12px; margin-top: 4px; display: block;">Status: ${statusTeks}</span>
-                            </div>
+                            <strong>Desa:</strong> ${namaDesaGeo}<br>
+                            <strong>Jumlah Kasus:</strong> ${totalKasus} Kasus<br>
+                            <strong>Status:</strong> <span style="color: ${totalKasus >= 5 ? 'red' : 'green'}; font-weight: bold;">${statusZona}</span>
                         `);
                     }
-                }).addTo(mapDesa);
-
-                // 3. Render Titik Koordinat Kasus (Marker) di atas Peta Desa
-                points.forEach((p) => {
-                    const marker = L.circleMarker([p.lat, p.lng], {
-                        radius: 8,
-                        color: '#ffffff',
-                        weight: 2,
-                        fillColor: '#E11D48', 
-                        fillOpacity: 1
-                    }).addTo(mapDesa);
-
-                    marker.bindPopup(`
-                        <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 4px; min-width: 180px;">
-                            <b style="font-size: 13px; color: #0F172A;"><i class="fa-solid fa-bed-pulse" style="color:#E11D48;"></i> Titik Kasus DBD</b><br>
-                            <hr style="margin: 4px 0; border:0; border-top:1px solid #eee;">
-                            <span style="font-size: 11px; color: #334155;"><b>Pasien:</b> ${p.data.namaPasien || '-'}</span><br>
-                            <span style="font-size: 11px; color: #334155;"><b>Desa:</b> ${p.data.desa || '-'}</span><br>
-                            <span style="font-size: 11px; color: #64748B;"><b>Info:</b> ${p.data.catatan || p.data.keterangan || 'Tidak ada catatan'}</span><br>
-                            <div style="margin-top: 8px;">
-                                <a href="jadwal.html?cari=${encodeURIComponent(p.data.namaPasien || '')}" target="_blank" style="background: #E11D48; color: white; padding: 5px 10px; font-size: 10px; font-weight: bold; border-radius: 6px; text-decoration: none; display: inline-block; text-align: center; width: 100%;">
-                                    <i class="fa-solid fa-user-shield"></i> Lihat Data Lengkap di Admin
-                                </a>
-                            </div>
-                        </div>
-                    `);
-                });
+                }).addTo(map);
 
             } catch (error) {
-                console.error("Gagal memuat data dari Firebase atau GeoJSON:", error);
+                console.error("Gagal memuat data peta atau firebase:", error);
             }
-        });
-
-        window.toggleMobileMenu = function() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
         }
+
+        // Jalankan fungsi saat halaman dimuat
+        loadMapData();
     </script>
 </body>
 </html>
