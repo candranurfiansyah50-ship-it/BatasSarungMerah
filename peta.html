@@ -78,7 +78,7 @@
         <section class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <div>
-                    <h2 class="text-2xl font-extrabold text-slate-900">Peta Zona Risiko DBD Per Desa</h2>
+                    <h2 class="text-2xl font-extrabold text-slate-900">Peta Zona Risiko DBD Per Desa & Titik Kasus</h2>
                     <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Kecamatan Pasongsongan — Wilayah otomatis menjadi <b>Zona Merah</b> jika terdapat &ge; 5 kasus.</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-3 text-xs font-bold">
@@ -91,7 +91,7 @@
             <div class="relative rounded-3xl overflow-hidden border border-slate-200 shadow-inner">
                 <div id="map-desa" class="map-container"></div>
             </div>
-            <p class="text-[11px] text-slate-400 mt-3 text-center"><i class="fa-solid fa-circle-info"></i> Klik pada wilayah poligon desa di peta untuk melihat detail jumlah kasus aktual dan status zonanya.</p>
+            <p class="text-[11px] text-slate-400 mt-3 text-center"><i class="fa-solid fa-circle-info"></i> Klik pada poligon desa untuk melihat total kasus, atau klik pada pin titik koordinat merah/kuning untuk melihat detail pasien dan masuk ke panel admin.</p>
         </section>
 
     </main>
@@ -106,7 +106,7 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <!-- Script Integrasi Peta Desa (Firebase + GeoJSON dengan Normalisasi Teks) -->
+    <!-- Script Integrasi Peta Desa + Titik Koordinat Kasus dari Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -130,49 +130,54 @@
             
             // Inisialisasi Peta Zona Wilayah Desa
             const mapDesa = L.map('map-desa').setView(pasongsonganCenter, 11);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}⁠/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(mapDesa);
 
             try {
-                // Ambil data laporan dari Firebase
+                // 1. Ambil data laporan dari Firebase
                 const querySnapshot = await getDocs(collection(db, "laporan_dbd"));
                 let kasusPerDesa = {}; 
+                let points = [];
 
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
                     let namaDesaRaw = (data.desa || "").trim();
-                    
-                    // Normalisasi string: hilangkan kata "desa " dan jadikan huruf kecil agar seragam dengan GeoJSON
                     let namaDesa = namaDesaRaw.replace(/^desa\s+/i, "").toLowerCase();
 
                     if (namaDesa) {
                         kasusPerDesa[namaDesa] = (kasusPerDesa[namaDesa] || 0) + 1;
                     }
+
+                    const lat = parseFloat(data.latitude || data.lat);
+                    const lng = parseFloat(data.longitude || data.lng);
+
+                    if (!isNaN(lat) && !isNaN(lng)) {
+                        points.push({ lat, lng, data });
+                    }
                 });
 
-                // Muat dan Render Peta Poligon GeoJSON Desa
+                // 2. Muat dan Render Peta Poligon GeoJSON Desa
                 try {
                     const response = await fetch('pasongsongan.geojson');
                     const geojsonData = await response.json();
 
                     L.geoJson(geojsonData, {
                         style: function(feature) {
-                            // Ambil nama desa dari GeoJSON dan normalisasi
                             const propDesa = (feature.properties.nama_desa || feature.properties.name || "").trim();
                             const namaDesaGeo = propDesa.replace(/^desa\s+/i, "").toLowerCase();
                             
                             const totalKasus = kasusPerDesa[namaDesaGeo] || 0;
-                            const isZonaMerah = totalKasus >= 5; // Merah jika kasus >= 5
+                            const isZonaMerah = totalKasus >= 5;
 
                             return {
-                                fillColor: isZonaMerah ? '#DC2626' : '#10B981', // Merah (#DC2626) atau Hijau Aman (#10B981)
+                                fillColor: isZonaMerah ? '#DC2626' : '#10B981', // Merah / Hijau
                                 weight: 2,
                                 opacity: 1,
                                 color: 'white',
                                 dashArray: '3',
-                                fillOpacity: 0.6
+                                fillOpacity: 0.5
                             };
                         },
                         onEachFeature: function(feature, layer) {
@@ -196,6 +201,33 @@
                 } catch (geojsonError) {
                     console.warn("File 'pasongsongan.geojson' tidak ditemukan atau gagal dimuat.", geojsonError);
                 }
+
+                // 3. Render Titik Koordinat Kasus (Marker) di atas Peta Desa
+                points.forEach((p) => {
+                    const marker = L.circleMarker([p.lat, p.lng], {
+                        radius: 8,
+                        color: '#ffffff',
+                        weight: 2,
+                        fillColor: '#E11D48', // Warna merah terang untuk titik kasus
+                        fillOpacity: 1
+                    }).addTo(mapDesa);
+
+                    // Saat titik koordinat ditekan, tampilkan detail dan tombol ke Panel Admin
+                    marker.bindPopup(`
+                        <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 4px; min-width: 180px;">
+                            <b style="font-size: 13px; color: #0F172A;"><i class="fa-solid fa-bed-pulse" style="color:#E11D48;"></i> Titik Kasus DBD</b><br>
+                            <hr style="margin: 4px 0; border:0; border-top:1px solid #eee;">
+                            <span style="font-size: 11px; color: #334155;"><b>Pasien:</b> ${p.data.namaPasien || '-'}</span><br>
+                            <span style="font-size: 11px; color: #334155;"><b>Desa:</b> ${p.data.desa || '-'}</span><br>
+                            <span style="font-size: 11px; color: #64748B;"><b>Info:</b> ${p.data.catatan || p.data.keterangan || 'Tidak ada catatan'}</span><br>
+                            <div style="margin-top: 8px;">
+                                <a href="jadwal.html?cari=${encodeURIComponent(p.data.namaPasien || '')}" target="_blank" style="background: #E11D48; color: white; padding: 5px 10px; font-size: 10px; font-weight: bold; border-radius: 6px; text-decoration: none; display: inline-block; text-align: center; width: 100%;">
+                                    <i class="fa-solid fa-user-shield"></i> Lihat Data Lengkap di Admin
+                                </a>
+                            </div>
+                        </div>
+                    `);
+                });
 
             } catch (error) {
                 console.error("Gagal memuat data dari Firebase:", error);
