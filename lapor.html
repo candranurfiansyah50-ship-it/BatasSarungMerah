@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lapor PSN & Kasus DBD - BATAS SARUNG MERAH</title>
+    <title>Lapor Kasus DBD - BATAS SARUNG MERAH</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
@@ -25,7 +25,6 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; color: #1E293B; }
         .nav-active { color: #E11D48; border-bottom: 3px solid #E11D48; font-weight: 700; }
-        .type-btn.active { background-color: #E11D48; color: #ffffff; box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.3); }
         #picker-map { width: 100%; height: 320px; border-radius: 1rem; z-index: 10; }
         
         /* Styling Pop-up Notifikasi Melayang */
@@ -62,7 +61,7 @@
             <!-- Desktop Nav Menu -->
             <nav class="hidden lg:flex items-center space-x-8 text-sm font-semibold">
                 <a href="index.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Dashboard</a>
-                <a href="lapor.html" class="nav-active pb-1 transition">Lapor PSN</a>
+                <a href="lapor.html" class="nav-active pb-1 transition">Lapor Kasus</a>
                 <a href="peta.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Zona Risiko</a>
                 <a href="jadwal.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Akses Admin</a>
                 <a href="edukasi.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Edukasi 3M+</a>
@@ -78,7 +77,7 @@
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-2">
             <a href="index.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Dashboard</a>
-            <a href="lapor.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm bg-rose-50 text-rose-600">Lapor PSN</a>
+            <a href="lapor.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm bg-rose-50 text-rose-600">Lapor Kasus</a>
             <a href="peta.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Zona Risiko</a>
             <a href="jadwal.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Jadwal Aksi</a>
             <a href="edukasi.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Edukasi 3M+</a>
@@ -90,29 +89,17 @@
         <section class="bg-white p-8 sm:p-10 rounded-3xl shadow-sm border border-slate-100 max-w-3xl mx-auto">
             <div class="text-center max-w-xl mx-auto mb-6">
                 <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-xl mx-auto mb-3">
-                    <i class="fa-solid fa-file-pen"></i>
-                </div>
-                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Layanan Lintas Sektor Pasongsongan</h2>
-                <p class="text-xs sm:text-sm text-slate-500 mt-1">Pilih jenis pelaporan dan tandai lokasi titik temuan pada peta otomatis.</p>
-            </div>
-
-            <!-- Tombol Pilihan Opsi Pelaporan -->
-            <div class="grid grid-cols-2 gap-3 p-1.5 bg-slate-100 rounded-2xl mb-8">
-                <button type="button" id="btnOptPSN" onclick="switchReportType('psn')" class="type-btn active py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-mosquito"></i>
-                    <span>Lapor Sarang / Jentik Nyamuk</span>
-                </button>
-                <button type="button" id="btnOptPasien" onclick="switchReportType('pasien')" class="type-btn py-3 px-4 rounded-xl font-bold text-xs sm:text-sm text-slate-600 transition flex items-center justify-center space-x-2">
                     <i class="fa-solid fa-bed-pulse"></i>
-                    <span>Lapor Pasien Terjangkit DBD</span>
-                </button>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Lapor Pasien Terjangkit DBD</h2>
+                <p class="text-xs sm:text-sm text-slate-500 mt-1">Isi formulir di bawah ini dan tandai lokasi tempat tinggal atau perawatan pasien pada peta otomatis.</p>
             </div>
 
             <form id="formPSN" onsubmit="handleLaporan(event)" class="space-y-5">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nama Pelapor / Kader</label>
-                        <input type="text" id="inputNamaPelapor" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition" placeholder="Masukkan nama lengkap">
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nama Pelapor / Keluarga</label>
+                        <input type="text" id="inputNamaPelapor" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition" placeholder="Masukkan nama lengkap pelapor">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nomor WhatsApp</label>
@@ -137,24 +124,14 @@
                         </select>
                     </div>
 
-                    <!-- Kolom Dinamis 1: Status Jentik -->
-                    <div id="fieldStatusJentik">
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Status Kondisi Jentik Air</label>
-                        <select id="inputStatusJentik" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition font-medium">
-                            <option value="Negatif Jentik (Aman)">Negatif Jentik (Aman / Bebas Jentik)</option>
-                            <option value="Positif Ditemukan Jentik">Positif Ditemukan Jentik</option>
-                        </select>
-                    </div>
-
-                    <!-- Kolom Dinamis 2: Nama Pasien -->
-                    <div id="fieldNamaPasien" class="hidden">
+                    <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nama Pasien / Terduga DBD</label>
-                        <input type="text" id="inputNamaPasien" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition" placeholder="Nama lengkap pasien">
+                        <input type="text" id="inputNamaPasien" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition" placeholder="Nama lengkap pasien">
                     </div>
                 </div>
 
                 <!-- Kolom Tambahan Usia & Lokasi Rawat -->
-                <div id="extraPasienFields" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Perkiraan Usia Pasien</label>
                         <input type="number" id="inputUsia" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition" placeholder="Contoh: 12 (tahun)">
@@ -188,13 +165,13 @@
                 </div>
 
                 <div>
-                    <label id="labelCatatan" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Catatan / Keterangan Penampungan Air</label>
-                    <textarea id="inputCatatan" rows="3" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition" placeholder="Sebutkan bak mandi, drum, atau tempayan yang diperiksa..."></textarea>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Kronologi / Gejala yang Dialami Pasien</label>
+                    <textarea id="inputCatatan" rows="3" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-rose-600 focus:bg-white transition" placeholder="Sebutkan gejala demam, bintik merah, dll..."></textarea>
                 </div>
 
                 <button type="submit" id="submitBtn" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3.5 rounded-xl text-sm shadow-lg shadow-rose-600/20 transition flex items-center justify-center space-x-2">
                     <i class="fa-solid fa-paper-plane"></i>
-                    <span>Kirim Laporan</span>
+                    <span>Kirim Laporan Pasien DBD</span>
                 </button>
             </form>
         </section>
@@ -229,7 +206,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        let currentReportType = 'psn';
         let pickerMap = null;
         let marker = null;
 
@@ -278,39 +254,6 @@
             }
         }
 
-        window.switchReportType = function(type) {
-            currentReportType = type;
-            const btnPSN = document.getElementById('btnOptPSN');
-            const btnPasien = document.getElementById('btnOptPasien');
-            const fieldStatusJentik = document.getElementById('fieldStatusJentik');
-            const fieldNamaPasien = document.getElementById('fieldNamaPasien');
-            const extraPasienFields = document.getElementById('extraPasienFields');
-            const labelCatatan = document.getElementById('labelCatatan');
-            const inputCatatan = document.getElementById('inputCatatan');
-            const submitBtnText = document.querySelector('#submitBtn span');
-            const inputNamaPasien = document.getElementById('inputNamaPasien');
-
-            if (type === 'psn') {
-                btnPSN.className = "type-btn active py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center space-x-2";
-                btnPasien.className = "type-btn py-3 px-4 rounded-xl font-bold text-xs sm:text-sm text-slate-600 transition flex items-center justify-center space-x-2";
-                fieldStatusJentik.classList.remove('hidden');
-                fieldNamaPasien.classList.add('hidden');
-                extraPasienFields.classList.add('hidden');
-                inputNamaPasien.removeAttribute('required');
-                labelCatatan.innerText = "Catatan / Keterangan Penampungan Air";
-                submitBtnText.innerText = "Kirim Laporan Sarang / Jentik Nyamuk";
-            } else {
-                btnPasien.className = "type-btn active py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center space-x-2";
-                btnPSN.className = "type-btn py-3 px-4 rounded-xl font-bold text-xs sm:text-sm text-slate-600 transition flex items-center justify-center space-x-2";
-                fieldStatusJentik.classList.add('hidden');
-                fieldNamaPasien.classList.remove('hidden');
-                extraPasienFields.classList.remove('hidden');
-                inputNamaPasien.setAttribute('required', 'true');
-                labelCatatan.innerText = "Kronologi / Gejala yang Dialami Pasien";
-                submitBtnText.innerText = "Kirim Laporan";
-            }
-        }
-
         window.handleLaporan = async function(event) {
             event.preventDefault();
             const submitBtn = document.getElementById('submitBtn');
@@ -318,14 +261,13 @@
 
             try {
                 const dataLaporan = {
-                    jenisLaporan: currentReportType,
+                    jenisLaporan: 'pasien',
                     namaPelapor: document.getElementById('inputNamaPelapor').value,
                     telepon: document.getElementById('inputTelepon').value,
                     desa: document.getElementById('inputDesa').value,
-                    statusJentik: currentReportType === 'psn' ? document.getElementById('inputStatusJentik').value : null,
-                    namaPasien: currentReportType === 'pasien' ? document.getElementById('inputNamaPasien').value : null,
-                    usiaPasien: currentReportType === 'pasien' ? document.getElementById('inputUsia').value : null,
-                    lokasiRawat: currentReportType === 'pasien' ? document.getElementById('inputLokasiRawat').value : null,
+                    namaPasien: document.getElementById('inputNamaPasien').value,
+                    usiaPasien: document.getElementById('inputUsia').value,
+                    lokasiRawat: document.getElementById('inputLokasiRawat').value,
                     latitude: document.getElementById('inputLat').value,
                     longitude: document.getElementById('inputLng').value,
                     catatan: document.getElementById('inputCatatan').value,
@@ -339,9 +281,8 @@
                 const alertBox = document.getElementById('alertSuccess');
                 alertBox.classList.remove('hidden');
                 
-                // Reset form dan kembalikan ke mode PSN
+                // Reset form
                 document.getElementById('formPSN').reset();
-                switchReportType('psn');
                 
                 // Sembunyikan pop-up secara otomatis setelah 4 detik
                 setTimeout(() => { 
