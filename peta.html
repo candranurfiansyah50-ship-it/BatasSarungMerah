@@ -49,7 +49,7 @@
             <!-- Desktop Nav Menu -->
             <nav class="hidden lg:flex items-center space-x-8 text-sm font-semibold">
                 <a href="index.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Dashboard</a>
-                <a href="lapor.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Lapor PSN</a>
+                <a href="lapor.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Lapor Kasus</a>
                 <a href="peta.html" class="nav-active pb-1 transition">Zona Risiko</a>
                 <a href="jadwal.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Akses Admin</a>
                 <a href="edukasi.html" class="text-slate-600 hover:text-rose-600 pb-1 transition border-b-3 border-transparent">Edukasi 3M+</a>
@@ -65,7 +65,7 @@
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-2">
             <a href="index.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Dashboard</a>
-            <a href="lapor.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Lapor PSN</a>
+            <a href="lapor.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Lapor Kasus</a>
             <a href="peta.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm bg-rose-50 text-rose-600">Zona Risiko</a>
             <a href="jadwal.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Jadwal Aksi</a>
             <a href="edukasi.html" class="block w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-rose-50 hover:text-rose-600 transition">Edukasi 3M+</a>
@@ -78,11 +78,11 @@
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <div>
                     <h2 class="text-2xl font-extrabold text-slate-900">Peta Sebaran Zona Risiko DBD Kecamatan Pasongsongan</h2>
-                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Titik koordinat temuan laporan petugas/warga.</p>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Radius wilayah 100 meter per titik laporan kasus.</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-3 text-xs font-bold">
-                    <span class="flex items-center space-x-1.5 bg-rose-50 text-rose-700 px-3 py-1.5 rounded-full border border-rose-200"><span class="w-2.5 h-2.5 bg-rose-600 rounded-full inline-block"></span> <span>Terdapat laporan/kasus</span></span>
-                    <span class="flex items-center space-x-1.5 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full border border-emerald-200"><span class="w-2.5 h-2.5 bg-emerald-500 rounded-full inline-block"></span> <span>Aman / Negatif</span></span>
+                    <span class="flex items-center space-x-1.5 bg-rose-50 text-rose-700 px-3 py-1.5 rounded-full border border-rose-200"><span class="w-2.5 h-2.5 bg-rose-600 rounded-full inline-block"></span> <span>Zona Waspada (Radius Bersentuhan)</span></span>
+                    <span class="flex items-center space-x-1.5 bg-amber-50 text-amber-700 px-3 py-1.5 rounded-full border border-amber-200"><span class="w-2.5 h-2.5 bg-amber-500 rounded-full inline-block"></span> <span>Zona Hati-hati (Radius Aman)</span></span>
                 </div>
             </div>
 
@@ -90,7 +90,7 @@
             <div class="relative rounded-3xl overflow-hidden border border-slate-200 shadow-inner">
                 <div id="map"></div>
             </div>
-            <p class="text-[11px] text-slate-400 mt-3 text-center"><i class="fa-solid fa-circle-info"></i> Klik pada pin marker di peta untuk melihat informasi zona wilayah.</p>
+            <p class="text-[11px] text-slate-400 mt-3 text-center"><i class="fa-solid fa-circle-info"></i> Klik pada pin marker di peta untuk melihat detail informasi zona wilayah.</p>
         </section>
     </main>
 
@@ -104,7 +104,7 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <!-- Firebase Reader Script untuk Peta -->
+    <!-- Firebase Reader Script untuk Peta dengan Radius & Deteksi Bersentuhan -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -134,34 +134,72 @@
 
             try {
                 const querySnapshot = await getDocs(collection(db, "laporan_dbd"));
-                
+                let points = [];
+
+                // 1. Kumpulkan semua titik data valid
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
                     const lat = parseFloat(data.latitude || data.lat);
                     const lng = parseFloat(data.longitude || data.lng);
 
                     if (!isNaN(lat) && !isNaN(lng)) {
-                        let warnaPin = (data.jenisLaporan === 'pasien' || data.statusJentik === 'Positif Ditemukan Jentik') ? '#E11D48' : '#10b981';
-                        let judulInfo = (data.jenisLaporan === 'pasien') ? 'Titik Lokasi Kasus Pasien DBD' : 'Titik Lokasi Jentik Positif';
-
-                        const marker = L.circleMarker([lat, lng], {
-                            radius: 10,
-                            color: '#ffffff',
-                            weight: 2,
-                            fillColor: warnaPin,
-                            fillOpacity: 0.85
-                        }).addTo(map);
-
-                        // Popup bersih tanpa identitas spesifik/pribadi (Nama pasien/pelapor disembunyikan)
-                        marker.bindPopup(`
-                            <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 4px;">
-                                <b style="font-size: 13px; color: #0F172A;">${judulInfo}</b><br>
-                                <span style="font-size: 11px; color: #64748B;">Desa: ${data.desa || '-'}</span><br>
-                                <span style="font-size: 11px; color: #64748B;">Keterangan: ${data.catatan || data.keterangan || '-'}</span>
-                            </div>
-                        `);
+                        points.push({ lat, lng, data });
                     }
                 });
+
+                // 2. Cek apakah jarak antar titik radius 100m bersentuhan (jarak antar pusat <= 200 meter)
+                points.forEach((p1, i) => {
+                    let isOverlap = false;
+                    points.forEach((p2, j) => {
+                        if (i !== j) {
+                            const ll1 = L.latLng(p1.lat, p1.lng);
+                            const ll2 = L.latLng(p2.lat, p2.lng);
+                            const distanceInMeters = ll1.distanceTo(ll2);
+                            
+                            // Jika jarak kurang dari atau sama dengan 200 meter, berarti radius 100m bersentuhan/tumpang tindih
+                            if (distanceInMeters <= 200) {
+                                isOverlap = true;
+                            }
+                        }
+                    });
+                    p1.isOverlap = isOverlap;
+                });
+
+                // 3. Render lingkaran radius dan marker ke peta berdasarkan status overlap
+                points.forEach((p) => {
+                    // Jika bersentuhan jadi Merah (Zona Waspada), jika tidak jadi Kuning (Zona Hati-hati)
+                    const color = p.isOverlap ? '#E11D48' : '#D97706'; 
+                    const zoneName = p.isOverlap ? 'Zona Waspada (Radius Bersentuhan)' : 'Zona Hati-hati (Radius Aman)';
+
+                    // Gambar Area Radius 100 Meter
+                    L.circle([p.lat, p.lng], {
+                        radius: 100, // 100 meter
+                        color: color,
+                        weight: 2,
+                        fillColor: color,
+                        fillOpacity: 0.25
+                    }).addTo(map);
+
+                    // Gambar Titik Pin Marker di Tengah
+                    const marker = L.circleMarker([p.lat, p.lng], {
+                        radius: 7,
+                        color: '#ffffff',
+                        weight: 2,
+                        fillColor: color,
+                        fillOpacity: 1
+                    }).addTo(map);
+
+                    // Popup Informasi
+                    marker.bindPopup(`
+                        <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 4px;">
+                            <b style="font-size: 13px; color: #0F172A;">Titik Kasus Pasien DBD</b><br>
+                            <span style="font-size: 11px; font-weight: bold; color: ${color};">${zoneName}</span><br>
+                            <span style="font-size: 11px; color: #64748B;">Desa: ${p.data.desa || '-'}</span><br>
+                            <span style="font-size: 11px; color: #64748B;">Keterangan: ${p.data.catatan || p.data.keterangan || '-'}</span>
+                        </div>
+                    `);
+                });
+
             } catch (error) {
                 console.error("Gagal memuat titik peta dari Firebase:", error);
             }
