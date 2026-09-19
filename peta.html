@@ -25,7 +25,7 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; color: #1E293B; }
         .nav-active { color: #E11D48; border-bottom: 3px solid #E11D48; font-weight: 700; }
-        #map, #offline-map { width: 100%; height: 480px; border-radius: 1.5rem; z-index: 10; }
+        #map { width: 100%; height: 480px; border-radius: 1.5rem; z-index: 10; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
@@ -93,25 +93,6 @@
             </div>
             <p class="text-[11px] text-slate-400 mt-3 text-center"><i class="fa-solid fa-circle-info"></i> Klik pada pin marker di peta untuk melihat detail informasi zona wilayah.</p>
         </section>
-
-        <!-- Peta Offline Terpadu Kecamatan Pasongsongan -->
-        <section class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100">
-            <div class="flex items-center space-x-3 mb-6">
-                <div class="w-10 h-10 bg-rose-50 text-rose-600 rounded-xl flex items-center justify-center font-bold text-lg">
-                    <i class="fa-solid fa-map"></i>
-                </div>
-                <div>
-                    <h3 class="text-xl font-extrabold text-slate-900">Peta Offline Wilayah Satu Kecamatan Pasongsongan</h3>
-                    <p class="text-xs text-slate-500">Cakupan direktori wilayah administratif utuh (9 Desa Resmi) di Kabupaten Sumenep, Jawa Timur</p>
-                </div>
-            </div>
-
-            <!-- Tampilan Peta Offline Wilayah Administrasi Kecamatan Pasongsongan -->
-            <div class="relative rounded-3xl overflow-hidden border border-slate-200 shadow-inner">
-                <div id="offline-map"></div>
-            </div>
-            <p class="text-[11px] text-slate-400 mt-3 text-center"><i class="fa-solid fa-circle-info"></i> Peta batas wilayah administratif Kecamatan Pasongsongan, Kabupaten Sumenep, Jawa Timur.</p>
-        </section>
     </main>
 
     <!-- Footer -->
@@ -152,29 +133,6 @@
                 maxZoom: 19,
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(map);
-
-            // 2. Peta Offline Wilayah Administratif Kecamatan Pasongsongan
-            const offlineMap = L.map('offline-map').setView(pasongsonganCenter, 12);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '&copy; OpenStreetMap contributors'
-            }).addTo(offlineMap);
-
-            // Menambahkan Marker / Batas Wilayah Administratif Kecamatan Pasongsongan, Kab. Sumenep, Jawa Timur
-            L.circle(pasongsonganCenter, {
-                radius: 4000, // Perkiraan cakupan wilayah kecamatan
-                color: '#E11D48',
-                weight: 3,
-                fillColor: '#E11D48',
-                fillOpacity: 0.15
-            }).addTo(offlineMap).bindPopup(`
-                <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 4px;">
-                    <b style="font-size: 13px; color: #0F172A;">Kecamatan Pasongsongan</b><br>
-                    <span style="font-size: 11px; color: #64748B;">Kabupaten: Sumenep</span><br>
-                    <span style="font-size: 11px; color: #64748B;">Provinsi: Jawa Timur</span><br>
-                    <span style="font-size: 11px; font-weight: bold; color: #E11D48;">Kode Wilayah: 35.29.13</span>
-                </div>
-            `);
 
             try {
                 const querySnapshot = await getDocs(collection(db, "laporan_dbd"));
