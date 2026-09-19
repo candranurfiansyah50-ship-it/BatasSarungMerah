@@ -73,7 +73,8 @@
     </header>
 
     <!-- Main Content: Peta Zona Risiko -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full space-y-8">
+        <!-- Peta Interaktif Utama -->
         <section class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <div>
@@ -91,6 +92,78 @@
                 <div id="map"></div>
             </div>
             <p class="text-[11px] text-slate-400 mt-3 text-center"><i class="fa-solid fa-circle-info"></i> Klik pada pin marker di peta untuk melihat detail informasi zona wilayah.</p>
+        </section>
+
+        <!-- Peta Offline Terpadu Kecamatan Pasongsongan -->
+        <section class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="w-10 h-10 bg-rose-50 text-rose-600 rounded-xl flex items-center justify-center font-bold text-lg">
+                    <i class="fa-solid fa-map"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-extrabold text-slate-900">Peta Offline Wilayah Satu Kecamatan Pasongsongan</h3>
+                    <p class="text-xs text-slate-500">Cakupan direktori wilayah administratif utuh (9 Desa Resmi)</p>
+                </div>
+            </div>
+
+            <!-- Container Peta Offline / Daftar Desa Terpadu -->
+            <div class="p-6 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-xl relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                </div>
+                
+                <div class="relative z-10">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 mb-6 border-b border-slate-700 gap-2">
+                        <div>
+                            <span class="bg-rose-500/20 text-rose-300 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border border-rose-500/30">Kecamatan Pasongsongan</span>
+                            <h4 class="text-lg font-bold mt-1">Cakupan Wilayah Operasional Lintas Sektor</h4>
+                        </div>
+                        <div class="text-xs text-slate-400">
+                            <i class="fa-solid fa-database mr-1"></i> Data Offline Terintegrasi
+                        </div>
+                    </div>
+
+                    <!-- List 9 Desa dalam Satu Wadah -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-xl flex items-center space-x-3">
+                            <div class="w-2 h-2 rounded-full bg-rose-500"></div>
+                            <span class="text-xs font-semibold text-slate-200">Desa Pasongsongan</span>[cite: 4]
+                        </div>
+                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-xl flex items-center space-x-3">
+                            <div class="w-2 h-2 rounded-full bg-rose-500"></div>
+                            <span class="text-xs font-semibold text-slate-200">Desa Lebeng Timur</span>[cite: 4]
+                        </div>
+                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-xl flex items-center space-x-3">
+                            <div class="w-2 h-2 rounded-full bg-rose-500"></div>
+                            <span class="text-xs font-semibold text-slate-200">Desa Lebeng Barat</span>[cite: 4]
+                        </div>
+                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-xl flex items-center space-x-3">
+                            <div class="w-2 h-2 rounded-full bg-rose-500"></div>
+                            <span class="text-xs font-semibold text-slate-200">Desa Panaongan</span>[cite: 4]
+                        </div>
+                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-xl flex items-center space-x-3">
+                            <div class="w-2 h-2 rounded-full bg-rose-500"></div>
+                            <span class="text-xs font-semibold text-slate-200">Desa Montorna</span>[cite: 4]
+                        </div>
+                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-xl flex items-center space-x-3">
+                            <div class="w-2 h-2 rounded-full bg-rose-500"></div>
+                            <span class="text-xs font-semibold text-slate-200">Desa Prancak</span>[cite: 4]
+                        </div>
+                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-xl flex items-center space-x-3">
+                            <div class="w-2 h-2 rounded-full bg-rose-500"></div>
+                            <span class="text-xs font-semibold text-slate-200">Desa Soddara</span>[cite: 4]
+                        </div>
+                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-xl flex items-center space-x-3">
+                            <div class="w-2 h-2 rounded-full bg-rose-500"></div>
+                            <span class="text-xs font-semibold text-slate-200">Desa Rajun</span>[cite: 4]
+                        </div>
+                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-xl flex items-center space-x-3">
+                            <div class="w-2 h-2 rounded-full bg-rose-500"></div>
+                            <span class="text-xs font-semibold text-slate-200">Desa Padang Dangan</span>[cite: 4]
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 
