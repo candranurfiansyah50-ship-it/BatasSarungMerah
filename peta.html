@@ -25,7 +25,7 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; color: #1E293B; }
         .nav-active { color: #E11D48; border-bottom: 3px solid #E11D48; font-weight: 700; }
-        #map { width: 100%; height: 480px; border-radius: 1.5rem; z-index: 10; }
+        #map, #offline-map { width: 100%; height: 480px; border-radius: 1.5rem; z-index: 10; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
@@ -102,68 +102,15 @@
                 </div>
                 <div>
                     <h3 class="text-xl font-extrabold text-slate-900">Peta Offline Wilayah Satu Kecamatan Pasongsongan</h3>
-                    <p class="text-xs text-slate-500">Cakupan direktori wilayah administratif utuh (9 Desa Resmi)</p>
+                    <p class="text-xs text-slate-500">Cakupan direktori wilayah administratif utuh (9 Desa Resmi) di Kabupaten Sumenep, Jawa Timur</p>
                 </div>
             </div>
 
-            <!-- Container Peta Offline / Daftar Desa Terpadu -->
-            <div class="p-6 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-xl relative overflow-hidden">
-                <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl">
-                    <i class="fa-solid fa-map-location-dot"></i>
-                </div>
-                
-                <div class="relative z-10">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 mb-6 border-b border-slate-700 gap-2">
-                        <div>
-                            <span class="bg-rose-500/20 text-rose-300 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border border-rose-500/30">Kecamatan Pasongsongan</span>
-                            <h4 class="text-lg font-bold mt-1">Cakupan Wilayah Operasional Lintas Sektor</h4>
-                        </div>
-                        <div class="text-xs text-slate-400">
-                            <i class="fa-solid fa-database mr-1"></i> Data Offline Terintegrasi
-                        </div>
-                    </div>
-
-                    <!-- List 9 Desa dalam Satu Wadah -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-xl flex items-center space-x-3">
-                            <div class="w-2 h-2 rounded-full bg-rose-500"></div>
-                            <span class="text-xs font-semibold text-slate-200">Desa Pasongsongan</span>[cite: 4]
-                        </div>
-                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-xl flex items-center space-x-3">
-                            <div class="w-2 h-2 rounded-full bg-rose-500"></div>
-                            <span class="text-xs font-semibold text-slate-200">Desa Lebeng Timur</span>[cite: 4]
-                        </div>
-                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-xl flex items-center space-x-3">
-                            <div class="w-2 h-2 rounded-full bg-rose-500"></div>
-                            <span class="text-xs font-semibold text-slate-200">Desa Lebeng Barat</span>[cite: 4]
-                        </div>
-                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-xl flex items-center space-x-3">
-                            <div class="w-2 h-2 rounded-full bg-rose-500"></div>
-                            <span class="text-xs font-semibold text-slate-200">Desa Panaongan</span>[cite: 4]
-                        </div>
-                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-xl flex items-center space-x-3">
-                            <div class="w-2 h-2 rounded-full bg-rose-500"></div>
-                            <span class="text-xs font-semibold text-slate-200">Desa Montorna</span>[cite: 4]
-                        </div>
-                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-xl flex items-center space-x-3">
-                            <div class="w-2 h-2 rounded-full bg-rose-500"></div>
-                            <span class="text-xs font-semibold text-slate-200">Desa Prancak</span>[cite: 4]
-                        </div>
-                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-xl flex items-center space-x-3">
-                            <div class="w-2 h-2 rounded-full bg-rose-500"></div>
-                            <span class="text-xs font-semibold text-slate-200">Desa Soddara</span>[cite: 4]
-                        </div>
-                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-xl flex items-center space-x-3">
-                            <div class="w-2 h-2 rounded-full bg-rose-500"></div>
-                            <span class="text-xs font-semibold text-slate-200">Desa Rajun</span>[cite: 4]
-                        </div>
-                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-xl flex items-center space-x-3">
-                            <div class="w-2 h-2 rounded-full bg-rose-500"></div>
-                            <span class="text-xs font-semibold text-slate-200">Desa Padang Dangan</span>[cite: 4]
-                        </div>
-                    </div>
-                </div>
+            <!-- Tampilan Peta Offline Wilayah Administrasi Kecamatan Pasongsongan -->
+            <div class="relative rounded-3xl overflow-hidden border border-slate-200 shadow-inner">
+                <div id="offline-map"></div>
             </div>
+            <p class="text-[11px] text-slate-400 mt-3 text-center"><i class="fa-solid fa-circle-info"></i> Peta batas wilayah administratif Kecamatan Pasongsongan, Kabupaten Sumenep, Jawa Timur.</p>
         </section>
     </main>
 
@@ -198,18 +145,42 @@
 
         document.addEventListener("DOMContentLoaded", async function() {
             const pasongsonganCenter = [-6.930, 113.660];
+            
+            // 1. Peta Utama Zona Risiko
             const map = L.map('map').setView(pasongsonganCenter, 12);
-
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(map);
 
+            // 2. Peta Offline Wilayah Administratif Kecamatan Pasongsongan
+            const offlineMap = L.map('offline-map').setView(pasongsonganCenter, 12);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(offlineMap);
+
+            // Menambahkan Marker / Batas Wilayah Administratif Kecamatan Pasongsongan, Kab. Sumenep, Jawa Timur
+            L.circle(pasongsonganCenter, {
+                radius: 4000, // Perkiraan cakupan wilayah kecamatan
+                color: '#E11D48',
+                weight: 3,
+                fillColor: '#E11D48',
+                fillOpacity: 0.15
+            }).addTo(offlineMap).bindPopup(`
+                <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 4px;">
+                    <b style="font-size: 13px; color: #0F172A;">Kecamatan Pasongsongan</b><br>
+                    <span style="font-size: 11px; color: #64748B;">Kabupaten: Sumenep</span><br>
+                    <span style="font-size: 11px; color: #64748B;">Provinsi: Jawa Timur</span><br>
+                    <span style="font-size: 11px; font-weight: bold; color: #E11D48;">Kode Wilayah: 35.29.13</span>
+                </div>
+            `);
+
             try {
                 const querySnapshot = await getDocs(collection(db, "laporan_dbd"));
                 let points = [];
 
-                // 1. Kumpulkan semua titik data valid
+                // Kumpulkan semua titik data valid
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
                     const lat = parseFloat(data.latitude || data.lat);
@@ -220,7 +191,7 @@
                     }
                 });
 
-                // 2. Cek apakah jarak antar titik radius 100m bersentuhan (jarak antar pusat <= 200 meter)
+                // Cek apakah jarak antar titik radius 100m bersentuhan
                 points.forEach((p1, i) => {
                     let isOverlap = false;
                     points.forEach((p2, j) => {
@@ -229,7 +200,6 @@
                             const ll2 = L.latLng(p2.lat, p2.lng);
                             const distanceInMeters = ll1.distanceTo(ll2);
                             
-                            // Jika jarak kurang dari atau sama dengan 200 meter, berarti radius 100m bersentuhan/tumpang tindih
                             if (distanceInMeters <= 200) {
                                 isOverlap = true;
                             }
@@ -238,22 +208,19 @@
                     p1.isOverlap = isOverlap;
                 });
 
-                // 3. Render lingkaran radius dan marker ke peta berdasarkan status overlap
+                // Render lingkaran radius dan marker ke peta
                 points.forEach((p) => {
-                    // Jika bersentuhan jadi Merah (Zona Waspada), jika tidak jadi Kuning (Zona Hati-hati)
                     const color = p.isOverlap ? '#E11D48' : '#D97706'; 
                     const zoneName = p.isOverlap ? 'Zona Waspada (Radius Bersentuhan)' : 'Zona Hati-hati (Radius Aman)';
 
-                    // Gambar Area Radius 100 Meter
                     L.circle([p.lat, p.lng], {
-                        radius: 100, // 100 meter
+                        radius: 100,
                         color: color,
                         weight: 2,
                         fillColor: color,
                         fillOpacity: 0.25
                     }).addTo(map);
 
-                    // Gambar Titik Pin Marker di Tengah
                     const marker = L.circleMarker([p.lat, p.lng], {
                         radius: 7,
                         color: '#ffffff',
@@ -262,7 +229,6 @@
                         fillOpacity: 1
                     }).addTo(map);
 
-                    // Popup Informasi
                     marker.bindPopup(`
                         <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 4px;">
                             <b style="font-size: 13px; color: #0F172A;">Titik Kasus Pasien DBD</b><br>
